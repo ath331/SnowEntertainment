@@ -1,12 +1,16 @@
 #include <iostream>
+#include "Parser/CConfigParser.h"
 
 using namespace std;
 
 int main()
 {
-	//TODO : CoreProject에 환경변수 관련 작업하기 ( 서버 아이피, 포트등 ini파일 만들어서 파싱후 서버세팅 )
+	CConfigParser parser("../Ini/Environment.ini");
 
-	cout << "HelloWorld !!" << endl;
+	cout << parser.GetString( "IP"        ) << endl;
+	cout << parser.GetInt   ( "TestInt"   ) << endl;
+	cout << parser.GetBool  ( "TestBool"  ) << endl;
+	cout << parser.GetFloat ( "TestFloat" ) << endl;
 
 	return 0;
 }

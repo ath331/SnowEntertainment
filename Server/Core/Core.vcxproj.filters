@@ -13,5 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Environment">
+      <UniqueIdentifier>{8b76f405-9894-4dbe-a520-6f144617206c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Parser">
+      <UniqueIdentifier>{07f90303-1198-432b-ad71-b65115d41475}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Environment\EnvironmentManager.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\CConfigParser.cpp">
+      <Filter>Parser</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Environment\EnvironmentManager.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\CConfigParser.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
