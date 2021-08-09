@@ -5,8 +5,10 @@
 
 class CConfigParser {
 public:
-
+	CConfigParser() { /*TODO : Log로 기본 생성자 쓰면 안된다고 하기?*/};
 	CConfigParser( const std::string& path );
+
+	virtual ~CConfigParser() {};
 
 public:
 
