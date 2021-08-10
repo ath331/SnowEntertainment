@@ -6,7 +6,6 @@
 int main()
 {
 	IOCP iocp;
-	iocp.Test();
 
 	return 0;
 }

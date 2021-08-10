@@ -10,11 +10,7 @@ public:
 	IOCP();
 	~IOCP();
 
-	void Test()
-	{
-		std::cout << "server IP   : " << _serverIP   << std::endl;
-		std::cout << "server PORT : " << _serverPORT << std::endl;
-	}
+	void Run();
 
 private:
 	std::string _serverIP;
