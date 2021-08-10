@@ -8,11 +8,10 @@ class EnvironmentManager :
 	public UxSingleTon< EnvironmentManager >
 {
 public:
-
 	EnvironmentManager();
+	~EnvironmentManager();
 
 private:
-
 
 };
 

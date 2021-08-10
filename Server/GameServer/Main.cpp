@@ -1,12 +1,12 @@
 #include <iostream>
-#include "Environment/EnvironmentManager.h"
+#include "IOCP/IOCP.h"
 
-using namespace std;
+//TODO : 공용 헤더 만들기
 
 int main()
 {
-	EnvironmentManager environmentManager;
-	cout << environmentManager.GetInt( "TestInt"   ) << endl;
+	IOCP iocp;
+	iocp.Test();
 
 	return 0;
 }
