@@ -21,6 +21,9 @@ CConfigParser::CConfigParser( const std::string& path )
 			std::string key   = line.substr( 0, line.find( delimiter ) );
 			std::string value = line.substr( line.find( delimiter ) + delimiter.length(), line.length() );
 
+			if ( key[0] == '#' )
+				continue;
+
 			_table[ key ] = value;
 		}
 

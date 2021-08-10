@@ -18,7 +18,7 @@ public:
 	int   GetInt  ( const std::string& key );
 	float GetFloat( const std::string& key );
 
-	std::string GetString( const std::string& name );
+	std::string GetString( const std::string& key );
 
 private:
 	std::map< std::string, std::string > _table;
