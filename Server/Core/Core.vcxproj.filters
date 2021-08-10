@@ -19,6 +19,9 @@
     <Filter Include="Parser">
       <UniqueIdentifier>{07f90303-1198-432b-ad71-b65115d41475}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SingleTon">
+      <UniqueIdentifier>{0817e8c1-510d-433e-b94b-501bf269b6ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Environment\EnvironmentManager.cpp">
@@ -34,6 +37,9 @@
     </ClInclude>
     <ClInclude Include="Parser\CConfigParser.h">
       <Filter>Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="SingleTon\UxSingleTon.h">
+      <Filter>SingleTon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

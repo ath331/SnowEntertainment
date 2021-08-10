@@ -28,19 +28,19 @@ CConfigParser::CConfigParser( const std::string& path )
 	}
 }
 
-bool CConfigParser::Contain( const std::string& name )
+bool CConfigParser::Contain( const std::string& key )
 {
-	if ( _table.find( name ) == _table.end() ) 
+	if ( _table.find( key ) == _table.end() )
 		return false;
 
 	return true;
 }
 
-bool CConfigParser::GetBool( const std::string& name )
+bool CConfigParser::GetBool( const std::string& key )
 {
-	if ( Contain( name ) ) 
+	if ( Contain( key ) ) 
 	{
-		if ( _table[ name ][ 0 ] == 't' || _table[ name ][ 0 ] == 'T' ) 
+		if ( _table[ key ][ 0 ] == 't' || _table[ key ][ 0 ] == 'T' ) 
 			return true;
 
 		else 
@@ -52,15 +52,15 @@ bool CConfigParser::GetBool( const std::string& name )
 	}
 }
 
-std::string CConfigParser::GetString( const std::string& name )
+std::string CConfigParser::GetString( const std::string& key )
 {
-	if ( Contain( name ) ) 
+	if ( Contain( key ) ) 
 	{
-		if ( _table[ name ].find( "\"" ) == std::string::npos ) 
-			return _table[ name ];
+		if ( _table[ key ].find( "\"" ) == std::string::npos ) 
+			return _table[ key ];
 
 		else 
-			return _table[ name ].substr( 1, _table[ name ].length() - 2 );
+			return _table[ key ].substr( 1, _table[ key ].length() - 2 );
 	}
 	else 
 	{
@@ -68,11 +68,11 @@ std::string CConfigParser::GetString( const std::string& name )
 	}
 }
 
-float CConfigParser::GetFloat( const std::string& name )
+float CConfigParser::GetFloat( const std::string& key )
 {
-	if ( Contain( name ) ) 
+	if ( Contain( key ) ) 
 	{
-		return std::stof( _table[ name ] );
+		return std::stof( _table[ key ] );
 	}
 	else 
 	{
@@ -80,11 +80,11 @@ float CConfigParser::GetFloat( const std::string& name )
 	}
 }
 
-int CConfigParser::GetInt( const std::string& name )
+int CConfigParser::GetInt( const std::string& key )
 {
-	if ( Contain( name ) ) 
+	if ( Contain( key ) )
 	{
-		return std::stoi( _table[ name ] );
+		return std::stoi( _table[ key ] );
 	}
 	else 
 	{
