@@ -1,10 +1,10 @@
 #pragma once
 #include "../Core/Parser/CConfigParser.h"
 #include "../Core/SingleTon/UxSingleTon.h"
+#include <winsock2.h>
 
 class IOCP :
-	public CConfigParser,
-	public UxSingleTon< IOCP >
+	public CConfigParser
 {
 public:
 	IOCP();
@@ -16,5 +16,6 @@ private:
 	std::string _serverIP;
 	std::string _serverPORT;
 
+	SOCKET _servSock;
 };
 
