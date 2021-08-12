@@ -5,6 +5,10 @@
 #include <string.h>
 #include <winsock2.h>
 
+#include <iostream>
+
+using namespace std;
+
 #define BUF_SIZE 1024
 void ErrorHandling( const char* message );
 
@@ -16,9 +20,16 @@ int main( int argc, char* argv[] )
 	int strLen;
 	SOCKADDR_IN servAdr;
 
-	if ( argc != 3 ) {
-		printf( "Usage : %s <IP> <port>\n", argv[ 0 ] );
-		exit( 1 );
+	std::string defaultIP   = "127.0.0.1";
+	std::string defaultPORT = "9999";
+
+	if ( argc != 3 ) 
+	{
+		cout << "Not Setting IP or PORT."          << endl;
+		cout << "Serring defaultIP and defaultPORT" << endl;
+
+		argv[ 1 ] = (char*)defaultIP.c_str();
+		argv[ 2 ] = (char*)defaultPORT.c_str();
 	}
 
 	if ( WSAStartup( MAKEWORD( 2, 2 ), &wsaData ) != 0 )
