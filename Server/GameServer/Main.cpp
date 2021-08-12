@@ -6,6 +6,7 @@
 int main()
 {
 	IOCP iocp;
+	iocp.Run();
 
 	return 0;
 }

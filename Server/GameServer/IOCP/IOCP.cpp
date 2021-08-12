@@ -4,25 +4,7 @@
 #include <process.h>
 #include <windows.h>
 
-#define BUF_SIZE 100
-#define READ	3
-#define	WRITE	5
-
 using namespace std;
-
-typedef struct    // socket info
-{
-	SOCKET hClntSock;
-	SOCKADDR_IN clntAdr;
-} PER_HANDLE_DATA, * LPPER_HANDLE_DATA;
-
-typedef struct    // buffer info
-{
-	OVERLAPPED overlapped;
-	WSABUF wsaBuf;
-	char buffer[ BUF_SIZE ];
-	int rwMode;    // READ or WRITE
-} PER_IO_DATA, * LPPER_IO_DATA;
 
 unsigned int WINAPI EchoThreadMain( LPVOID CompletionPortIO );
 
@@ -31,24 +13,21 @@ IOCP::IOCP() :
 {
 	_serverIP   = GetString( "IP"   );
 	_serverPORT = GetString( "PORT" );
+	_ioInfo     = nullptr;
+	_handleInfo = nullptr;
 
-	WSADATA	wsaData;
-	HANDLE hComPort;
 	SYSTEM_INFO sysInfo;
-	LPPER_IO_DATA ioInfo = nullptr;
-	LPPER_HANDLE_DATA handleInfo = nullptr;
 
 	SOCKADDR_IN servAdr;
-	unsigned int recvBytes, i, flags = 0;
 
-	if ( WSAStartup( MAKEWORD( 2, 2 ), &wsaData ) != 0 )
+	if ( WSAStartup( MAKEWORD( 2, 2 ), &_wsaData ) != 0 )
 		cout << "WSAStartup() error!" <<endl;
 
-	hComPort = CreateIoCompletionPort( INVALID_HANDLE_VALUE, NULL, 0, 0 );
+	_hComPort = CreateIoCompletionPort( INVALID_HANDLE_VALUE, NULL, 0, 0 );
 	GetSystemInfo( &sysInfo );
 
-	for ( i = 0; i < sysInfo.dwNumberOfProcessors; i++ )
-		_beginthreadex( NULL, 0, EchoThreadMain, (LPVOID)hComPort, 0, NULL );
+	for ( unsigned short i = 0; i < sysInfo.dwNumberOfProcessors; i++ )
+		_beginthreadex( NULL, 0, EchoThreadMain, (LPVOID)_hComPort, 0, NULL );
 
 	_servSock = WSASocket( AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED );
 	memset( &servAdr, 0, sizeof( servAdr ) );
@@ -58,36 +37,6 @@ IOCP::IOCP() :
 
 	bind( _servSock, (SOCKADDR*)& servAdr, sizeof( servAdr ) );
 	listen( _servSock, 5 );
-
-	while ( 1 )
-	{
-		SOCKET hClntSock;
-		SOCKADDR_IN clntAdr;
-		int addrLen = sizeof( clntAdr );
-
-		hClntSock = accept( _servSock, (SOCKADDR*)& clntAdr, &addrLen );
-
-		handleInfo = new PER_HANDLE_DATA;
-		if ( !handleInfo )
-			continue;
-
-		handleInfo->hClntSock = hClntSock;
-		memcpy( &( handleInfo->clntAdr ), &clntAdr, addrLen );
-
-		CreateIoCompletionPort( (HANDLE)hClntSock, hComPort, (unsigned long long)handleInfo, 0 );
-
-		ioInfo = new PER_IO_DATA;
-		if ( !ioInfo )
-			continue;
-
-		memset( &( ioInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
-		ioInfo->wsaBuf.len = BUF_SIZE;
-		ioInfo->wsaBuf.buf = ioInfo->buffer;
-		ioInfo->rwMode = READ;
-
-		WSARecv( handleInfo->hClntSock, &( ioInfo->wsaBuf ),
-			1, (LPDWORD)&recvBytes, (LPDWORD)&flags, &( ioInfo->overlapped ), NULL );
-	}
 }
 
 IOCP::~IOCP()
@@ -97,27 +46,57 @@ IOCP::~IOCP()
 
 void IOCP::Run()
 {
+	unsigned int recvBytes, flags = 0;
 
+	while ( 1 )
+	{
+		SOCKET hClntSock;
+		SOCKADDR_IN clntAdr;
+		int addrLen = sizeof( clntAdr );
+
+		hClntSock = accept( _servSock, (SOCKADDR*)& clntAdr, &addrLen );
+
+		_handleInfo = new PER_HANDLE_DATA;
+		if ( !_handleInfo )
+			continue;
+
+		_handleInfo->hClntSock = hClntSock;
+		memcpy( &( _handleInfo->clntAdr ), &clntAdr, addrLen );
+
+		CreateIoCompletionPort( (HANDLE)hClntSock, _hComPort, ( unsigned long long )_handleInfo, 0 );
+
+		_ioInfo = new PER_IO_DATA;
+		if ( !_ioInfo )
+			continue;
+
+		memset( &( _ioInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
+		_ioInfo->wsaBuf.len = BUF_SIZE;
+		_ioInfo->wsaBuf.buf = _ioInfo->buffer;
+		_ioInfo->rwMode = READ;
+
+		WSARecv( _handleInfo->hClntSock, &( _ioInfo->wsaBuf ),
+			1, (LPDWORD)& recvBytes, (LPDWORD)& flags, &( _ioInfo->overlapped ), NULL );
+	}
 }
 
 unsigned int WINAPI EchoThreadMain( LPVOID pComPort )
 {
-	HANDLE hComPort = (HANDLE)pComPort;
+	HANDLE _hComPort = (HANDLE)pComPort;
 	SOCKET sock;
 	DWORD bytesTrans;
-	LPPER_HANDLE_DATA handleInfo = nullptr;
-	LPPER_IO_DATA ioInfo = nullptr;
+	LPPER_HANDLE_DATA _handleInfo = nullptr;
+	LPPER_IO_DATA _ioInfo = nullptr;
 	DWORD flags = 0;
 
 	while ( 1 )
 	{
-		GetQueuedCompletionStatus( hComPort, &bytesTrans, (PULONG_PTR)&handleInfo, (LPOVERLAPPED*)&ioInfo, INFINITE );
-		if ( !handleInfo || !ioInfo )
+		GetQueuedCompletionStatus( _hComPort, &bytesTrans, (PULONG_PTR)&_handleInfo, (LPOVERLAPPED*)&_ioInfo, INFINITE );
+		if ( !_handleInfo || !_ioInfo )
 			continue;
 
-		sock = handleInfo->hClntSock;
+		sock = _handleInfo->hClntSock;
 
-		if ( ioInfo->rwMode == READ )
+		if ( _ioInfo->rwMode == READ )
 		{
 			puts( "message received!" );
 			if ( bytesTrans == 0 )    // EOF Àü¼Û ½Ã
@@ -126,23 +105,23 @@ unsigned int WINAPI EchoThreadMain( LPVOID pComPort )
 				continue;
 			}
 
-			memset( &( ioInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
-			ioInfo->wsaBuf.len = bytesTrans;
-			ioInfo->rwMode = WRITE;
-			WSASend( sock, &( ioInfo->wsaBuf ),
-				1, NULL, 0, &( ioInfo->overlapped ), NULL );
+			memset( &( _ioInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
+			_ioInfo->wsaBuf.len = bytesTrans;
+			_ioInfo->rwMode = WRITE;
+			WSASend( sock, &( _ioInfo->wsaBuf ),
+				1, NULL, 0, &( _ioInfo->overlapped ), NULL );
 
-			ioInfo = new PER_IO_DATA;
-			memset( &( ioInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
-			ioInfo->wsaBuf.len = BUF_SIZE;
-			ioInfo->wsaBuf.buf = ioInfo->buffer;
-			ioInfo->rwMode = READ;
-			WSARecv( sock, &( ioInfo->wsaBuf ),
-				1, NULL, &flags, &( ioInfo->overlapped ), NULL );
+			_ioInfo = new PER_IO_DATA;
+			memset( &( _ioInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
+			_ioInfo->wsaBuf.len = BUF_SIZE;
+			_ioInfo->wsaBuf.buf = _ioInfo->buffer;
+			_ioInfo->rwMode = READ;
+			WSARecv( sock, &( _ioInfo->wsaBuf ),
+				1, NULL, &flags, &( _ioInfo->overlapped ), NULL );
 		}
 		else
 		{
-			puts( "message sent!" );
+			puts( "[Server] : " );
 		}
 	}
 	return 0;
