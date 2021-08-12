@@ -33,6 +33,7 @@ public:
 private:
 	std::string _serverIP;
 	std::string _serverPORT;
+	int _iocpThreadCount;
 
 	WSADATA	_wsaData;
 	HANDLE _hComPort;

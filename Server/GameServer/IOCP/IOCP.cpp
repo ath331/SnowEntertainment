@@ -11,12 +11,12 @@ unsigned int WINAPI EchoThreadMain( LPVOID CompletionPortIO );
 IOCP::IOCP() :
 	CConfigParser("../Ini/GameServer.ini")
 {
-	_serverIP   = GetString( "IP"   );
-	_serverPORT = GetString( "PORT" );
+	_serverIP        = GetString( "SERVER_IP"       );
+	_serverPORT      = GetString( "SERVER_PORT"     );
+	_iocpThreadCount = GetInt   ("IOCP_THREAD_COUNT");
+
 	_ioInfo     = nullptr;
 	_handleInfo = nullptr;
-
-	SYSTEM_INFO sysInfo;
 
 	SOCKADDR_IN servAdr;
 
@@ -24,9 +24,8 @@ IOCP::IOCP() :
 		cout << "WSAStartup() error!" <<endl;
 
 	_hComPort = CreateIoCompletionPort( INVALID_HANDLE_VALUE, NULL, 0, 0 );
-	GetSystemInfo( &sysInfo );
 
-	for ( unsigned short i = 0; i < sysInfo.dwNumberOfProcessors; i++ )
+	for ( unsigned short i = 0; i < _iocpThreadCount; i++ )
 		_beginthreadex( NULL, 0, EchoThreadMain, (LPVOID)_hComPort, 0, NULL );
 
 	_servSock = WSASocket( AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED );
