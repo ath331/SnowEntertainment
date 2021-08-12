@@ -36,7 +36,7 @@ private:
 	int _iocpThreadCount;
 
 	WSADATA	_wsaData;
-	HANDLE _hComPort;
+	HANDLE _completionPort;
 
 	LPPER_IO_DATA _ioInfo;
 	LPPER_HANDLE_DATA _handleInfo;
