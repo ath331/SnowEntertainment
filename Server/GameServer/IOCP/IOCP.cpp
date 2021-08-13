@@ -9,6 +9,7 @@
 #include "../NetWork/Listen/ListenManager.h"
 
 #include "../Thread/ThreadManager.h"
+
 using namespace std;
 
 unsigned int WINAPI EchoThreadMain( LPVOID CompletionPortIO );
@@ -24,12 +25,6 @@ IOCP::IOCP() :
 	cout << "IP   : "          << _serverIP        << endl;
 	cout << "PORT : "          << _serverPORT      << endl;
 	cout << "IoThreadCount : " << _iocpThreadCount << endl;
-
-	if ( WSAStartup( MAKEWORD( 2, 2 ), &_wsaData ) != 0 )
-	{
-		cout << "WSAStartup() error!" << endl;
-		exit(1);
-	}
 
 	_CreateCompletionPort();
 
@@ -54,7 +49,7 @@ IOCP::~IOCP()
 	if ( _bindManager )
 		delete _bindManager;
 
-	if( _listenManager )
+	if ( _listenManager )
 		delete _listenManager;
 
 	if ( _ioThreadManager )
@@ -100,7 +95,7 @@ void IOCP::Run()
 
 		hClntSock = accept( _servSock, (SOCKADDR*)& clntAdr, &addrLen );
 
-		cout << "[ Accet ] SOCKET is "<< hClntSock << endl;
+		cout << "[ Accept ] SOCKET is " << hClntSock << endl;
 
 		_handleInfo = new PER_HANDLE_DATA;
 		if ( !_handleInfo )

@@ -1,6 +1,5 @@
 #pragma once
 #include "../Core/Parser/CConfigParser.h"
-#include "../Core/SingleTon/UxSingleTon.h"
 #include <winsock2.h>
 
 #define BUF_SIZE 100
@@ -34,21 +33,20 @@ public:
 	void Run();
 
 private:
-	std::string _serverIP;
-	std::string _serverPORT;
-	int _iocpThreadCount;
+	std::string       _serverIP;
+	std::string       _serverPORT;
+	int               _iocpThreadCount;
 
-	WSADATA	_wsaData;
-	HANDLE  _completionPort;
+	HANDLE            _completionPort;
 
 	LPPER_IO_DATA     _ioInfo;
 	LPPER_HANDLE_DATA _handleInfo;
 
-	SOCKET _servSock;
+	SOCKET            _servSock;
 
-	BindManager*   _bindManager;
-	ListenManager* _listenManager;
-	ThreadManager* _ioThreadManager;
+	BindManager*      _bindManager;
+	ListenManager*    _listenManager;
+	ThreadManager*    _ioThreadManager;
 
 private:
 	void _CreateCompletionPort();
