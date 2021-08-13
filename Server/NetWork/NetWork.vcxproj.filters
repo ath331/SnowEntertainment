@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Accept">
+      <UniqueIdentifier>{26a489d8-b8eb-4ca7-9394-8084b0bb3c95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bind">
+      <UniqueIdentifier>{1e87b6ed-6578-4e82-9942-0b4815b6a76e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Listen">
+      <UniqueIdentifier>{4e60fa2d-17b2-40e5-9153-994315cf24a0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Accept\AcceptManager.cpp">
+      <Filter>Accept</Filter>
+    </ClCompile>
+    <ClCompile Include="Bind\BindManager.cpp">
+      <Filter>Bind</Filter>
+    </ClCompile>
+    <ClCompile Include="Listen\ListenManager.cpp">
+      <Filter>Listen</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Accept\AcceptManager.h">
+      <Filter>Accept</Filter>
+    </ClInclude>
+    <ClInclude Include="Bind\BindManager.h">
+      <Filter>Bind</Filter>
+    </ClInclude>
+    <ClInclude Include="Listen\ListenManager.h">
+      <Filter>Listen</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

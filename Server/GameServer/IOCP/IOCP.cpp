@@ -4,6 +4,10 @@
 #include <process.h>
 #include <windows.h>
 
+#include "../NetWork/Accept/AcceptManager.h"
+#include "../NetWork/Bind/BindManager.h"
+#include "../NetWork/Listen/ListenManager.h"
+
 using namespace std;
 
 unsigned int WINAPI EchoThreadMain( LPVOID CompletionPortIO );
@@ -18,8 +22,6 @@ IOCP::IOCP() :
 	_ioInfo     = nullptr;
 	_handleInfo = nullptr;
 
-	SOCKADDR_IN servAdr;
-
 	cout << "[ IOCP Setting ]" << endl;
 	cout << "IP   : "          << _serverIP << endl;
 	cout << "PORT : "          << _serverPORT << endl;
@@ -31,34 +33,35 @@ IOCP::IOCP() :
 		exit(1);
 	}
 
-	_completionPort = CreateIoCompletionPort( INVALID_HANDLE_VALUE, NULL, 0, 0 );
+	_CreateCompletionPort();
 
 	for ( unsigned short i = 0; i < _iocpThreadCount; i++ )
 		_beginthreadex( NULL, 0, EchoThreadMain, (LPVOID)_completionPort, 0, NULL );
 
 	_servSock = WSASocket( AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED );
-	memset( &servAdr, 0, sizeof( servAdr ) );
-	servAdr.sin_family = AF_INET;
-	servAdr.sin_addr.s_addr = htonl( INADDR_ANY );
-	servAdr.sin_port = htons( (u_short)atoi( _serverPORT.c_str() ) );
+	
+	_bindManager = new BindManager( _serverPORT );
+	if( _bindManager )
+		_bindManager->Bind( _servSock );
 
-	if ( bind( _servSock, (SOCKADDR*)& servAdr, sizeof( servAdr ) ) != 0 )
-	{
-		cout << "bind() error!" << endl;
-		exit( 1 );
-	}
-
-	if ( listen( _servSock, 5 ) != 0 )
-	{
-		cout << "listen() error!" << endl;
-		exit( 1 );
-	}
+	_listenManager = new ListenManager;
+	if( _listenManager )
+		_listenManager->Listen( _servSock );
 }
 
 IOCP::~IOCP()
 {
-
+	if ( _bindManager )
+		delete _bindManager;
+	if( _listenManager )
+		delete _listenManager;
 }
+
+void IOCP::_CreateCompletionPort()
+{
+	_completionPort = CreateIoCompletionPort( INVALID_HANDLE_VALUE, NULL, 0, 0 );
+}
+
 
 void IOCP::Run()
 {

@@ -21,6 +21,9 @@ typedef struct    // buffer info
 	int rwMode;    // READ or WRITE
 } PER_IO_DATA, * LPPER_IO_DATA;
 
+class BindManager;
+class ListenManager;
+
 class IOCP :
 	public CConfigParser
 {
@@ -36,11 +39,17 @@ private:
 	int _iocpThreadCount;
 
 	WSADATA	_wsaData;
-	HANDLE _completionPort;
+	HANDLE  _completionPort;
 
-	LPPER_IO_DATA _ioInfo;
+	LPPER_IO_DATA     _ioInfo;
 	LPPER_HANDLE_DATA _handleInfo;
 
 	SOCKET _servSock;
+
+	BindManager*   _bindManager;
+	ListenManager* _listenManager;
+
+private:
+	void _CreateCompletionPort();
 };
 
