@@ -41,12 +41,20 @@ IOCP::IOCP() :
 	_servSock = WSASocket( AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED );
 	
 	_bindManager = new BindManager( _serverPORT );
-	if( _bindManager )
-		_bindManager->Bind( _servSock );
+	if ( !_bindManager )
+	{
+		cout << "new Bind error" << endl;
+		exit( 1 );
+	}
+	_bindManager->Bind( _servSock );
 
 	_listenManager = new ListenManager;
-	if( _listenManager )
-		_listenManager->Listen( _servSock );
+	if( !_listenManager )
+	{
+		cout << "new Listen error" << endl;
+		exit( 1 );
+	}
+	_listenManager->Listen( _servSock );
 }
 
 IOCP::~IOCP()
