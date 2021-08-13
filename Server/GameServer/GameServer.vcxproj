@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="IOCP\IOCP.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Thread\ThreadManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
@@ -160,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IOCP\IOCP.h" />
+    <ClInclude Include="Thread\ThreadManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

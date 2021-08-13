@@ -8,6 +8,7 @@
 #include "../NetWork/Bind/BindManager.h"
 #include "../NetWork/Listen/ListenManager.h"
 
+#include "../Thread/ThreadManager.h"
 using namespace std;
 
 unsigned int WINAPI EchoThreadMain( LPVOID CompletionPortIO );
@@ -19,12 +20,9 @@ IOCP::IOCP() :
 	_serverPORT      = GetString( "SERVER_PORT"       );
 	_iocpThreadCount = GetInt   ( "IOCP_THREAD_COUNT" );
 
-	_ioInfo     = nullptr;
-	_handleInfo = nullptr;
-
 	cout << "[ IOCP Setting ]" << endl;
-	cout << "IP   : "          << _serverIP << endl;
-	cout << "PORT : "          << _serverPORT << endl;
+	cout << "IP   : "          << _serverIP        << endl;
+	cout << "PORT : "          << _serverPORT      << endl;
 	cout << "IoThreadCount : " << _iocpThreadCount << endl;
 
 	if ( WSAStartup( MAKEWORD( 2, 2 ), &_wsaData ) != 0 )
@@ -35,11 +33,41 @@ IOCP::IOCP() :
 
 	_CreateCompletionPort();
 
+	_ioThreadManager = new ThreadManager;
+	if ( !_ioThreadManager )
+	{
+		cout << "new _ioThreadManager error" << endl;
+	}
+
 	for ( unsigned short i = 0; i < _iocpThreadCount; i++ )
-		_beginthreadex( NULL, 0, EchoThreadMain, (LPVOID)_completionPort, 0, NULL );
+	{
+		_ioThreadManager->Add( (HANDLE)_beginthreadex( NULL, 0, EchoThreadMain, (LPVOID)_completionPort, 0, NULL ) );
+	}
 
 	_servSock = WSASocket( AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED );
-	
+
+	_ReadyConnect();
+}
+
+IOCP::~IOCP()
+{
+	if ( _bindManager )
+		delete _bindManager;
+
+	if( _listenManager )
+		delete _listenManager;
+
+	if ( _ioThreadManager )
+		delete _ioThreadManager;
+}
+
+void IOCP::_CreateCompletionPort()
+{
+	_completionPort = CreateIoCompletionPort( INVALID_HANDLE_VALUE, NULL, 0, 0 );
+}
+
+void IOCP::_ReadyConnect()
+{
 	_bindManager = new BindManager( _serverPORT );
 	if ( !_bindManager )
 	{
@@ -49,25 +77,12 @@ IOCP::IOCP() :
 	_bindManager->Bind( _servSock );
 
 	_listenManager = new ListenManager;
-	if( !_listenManager )
+	if ( !_listenManager )
 	{
 		cout << "new Listen error" << endl;
 		exit( 1 );
 	}
 	_listenManager->Listen( _servSock );
-}
-
-IOCP::~IOCP()
-{
-	if ( _bindManager )
-		delete _bindManager;
-	if( _listenManager )
-		delete _listenManager;
-}
-
-void IOCP::_CreateCompletionPort()
-{
-	_completionPort = CreateIoCompletionPort( INVALID_HANDLE_VALUE, NULL, 0, 0 );
 }
 
 

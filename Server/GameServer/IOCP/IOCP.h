@@ -23,7 +23,7 @@ typedef struct    // buffer info
 
 class BindManager;
 class ListenManager;
-
+class ThreadManager;
 class IOCP :
 	public CConfigParser
 {
@@ -48,8 +48,10 @@ private:
 
 	BindManager*   _bindManager;
 	ListenManager* _listenManager;
+	ThreadManager* _ioThreadManager;
 
 private:
 	void _CreateCompletionPort();
+	void _ReadyConnect();
 };
 

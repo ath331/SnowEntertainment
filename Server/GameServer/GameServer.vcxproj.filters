@@ -16,6 +16,9 @@
     <Filter Include="IOCP">
       <UniqueIdentifier>{e511e59a-511b-4da2-9417-1f3f118760ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Thread">
+      <UniqueIdentifier>{91cba2c7-d31e-4629-8e65-816ef59e9aae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -24,10 +27,16 @@
     <ClCompile Include="IOCP\IOCP.cpp">
       <Filter>IOCP</Filter>
     </ClCompile>
+    <ClCompile Include="Thread\ThreadManager.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IOCP\IOCP.h">
       <Filter>IOCP</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread\ThreadManager.h">
+      <Filter>Thread</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
