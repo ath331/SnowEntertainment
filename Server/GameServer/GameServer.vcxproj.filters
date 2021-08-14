@@ -30,6 +30,9 @@
     <ClCompile Include="Thread\ThreadManager.cpp">
       <Filter>Thread</Filter>
     </ClCompile>
+    <ClCompile Include="OverlappedCustom.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IOCP\IOCP.h">
@@ -37,6 +40,12 @@
     </ClInclude>
     <ClInclude Include="Thread\ThreadManager.h">
       <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OverlappedCustom.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

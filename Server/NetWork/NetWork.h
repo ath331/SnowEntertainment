@@ -15,7 +15,7 @@ public:
 		}
 	}
 
-	~NetWork() {};
+	~NetWork() { WSACleanup(); };
 
 private:
 	WSADATA _wsaData;

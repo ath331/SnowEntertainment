@@ -1,3 +1,5 @@
 같은 솔루션내의 다른 프로젝트 lib 접근 : http://egloos.zum.com/Lusain/v/3163505
 
 경고 수준 무시 : https://oulth.tistory.com/28
+
+WaitForMulitipleobjects 에 vector 주소 넣기 : https://stackoverflow.com/questions/11097059/use-stdvector-in-waitformultipleobjects

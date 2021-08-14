@@ -54,6 +54,9 @@ IOCP::~IOCP()
 
 	if ( _ioThreadManager )
 		delete _ioThreadManager;
+
+	if ( _acceptManager )
+		delete _acceptManager;
 }
 
 void IOCP::_CreateCompletionPort()
@@ -78,8 +81,14 @@ void IOCP::_ReadyConnect()
 		exit( 1 );
 	}
 	_listenManager->Listen( _servSock );
-}
 
+	_acceptManager = new AcceptManager;
+	if ( !_acceptManager )
+	{
+		cout << "new accept error" << endl;
+		exit( 1 );
+	}
+}
 
 void IOCP::Run()
 {
@@ -106,19 +115,23 @@ void IOCP::Run()
 
 		CreateIoCompletionPort( (HANDLE)hClntSock, _completionPort, ( unsigned long long )_handleInfo, 0 );
 
-		_ioInfo = new PER_IO_DATA;
-		if ( !_ioInfo )
-			continue;
-
-		memset( &( _ioInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
 		_ioInfo->wsaBuf.len = BUF_SIZE;
 		_ioInfo->wsaBuf.buf = _ioInfo->buffer;
-		_ioInfo->rwMode = READ;
+		_ioInfo->iocpMode = EIocpMode::READ;
 
 		WSARecv( _handleInfo->hClntSock, &( _ioInfo->wsaBuf ),
 			1, (LPDWORD)& recvBytes, (LPDWORD)& flags, &( _ioInfo->overlapped ), NULL );
 	}
 }
+
+void IOCP::Wait()
+{
+	int threadCount = _ioThreadManager->GetThreadCount();
+	vector< HANDLE >* threadVecPtr = _ioThreadManager->GetThreadVecPtr();
+
+	WaitForMultipleObjects( threadCount, threadVecPtr->data(), true, INFINITE );
+}
+
 
 unsigned int WINAPI EchoThreadMain( LPVOID pComPort )
 {
@@ -126,7 +139,7 @@ unsigned int WINAPI EchoThreadMain( LPVOID pComPort )
 	SOCKET sock;
 	DWORD bytesTrans;
 	LPPER_HANDLE_DATA handleInfo = nullptr;
-	LPPER_IO_DATA ioInfo = nullptr;
+	OverlappedCustomPtr ioInfo = nullptr;
 	DWORD flags = 0;
 
 	while ( 1 )
@@ -137,7 +150,7 @@ unsigned int WINAPI EchoThreadMain( LPVOID pComPort )
 
 		sock = handleInfo->hClntSock;
 
-		if ( ioInfo->rwMode == READ )
+		if ( ioInfo->iocpMode == EIocpMode::READ )
 		{
 			if ( bytesTrans == 0 )    // EOF Àü¼Û ½Ã
 			{
@@ -154,19 +167,18 @@ unsigned int WINAPI EchoThreadMain( LPVOID pComPort )
 
 			memset( &( ioInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
 			ioInfo->wsaBuf.len = bytesTrans;
-			ioInfo->rwMode = WRITE;
+			ioInfo->iocpMode = EIocpMode::WRITE;
 			WSASend( sock, &( ioInfo->wsaBuf ),
 				1, NULL, 0, &( ioInfo->overlapped ), NULL );
 
-			ioInfo = new PER_IO_DATA;
-			memset( &( ioInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
+
 			ioInfo->wsaBuf.len = BUF_SIZE;
 			ioInfo->wsaBuf.buf = ioInfo->buffer;
-			ioInfo->rwMode = READ;
+			ioInfo->iocpMode = EIocpMode::READ;
 			WSARecv( sock, &( ioInfo->wsaBuf ),
 				1, NULL, &flags, &( ioInfo->overlapped ), NULL );
 		}
-		else
+		else if( ioInfo->iocpMode == EIocpMode::WRITE )
 		{
 			cout << "message echo------" << endl;
 		}

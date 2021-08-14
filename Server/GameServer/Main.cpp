@@ -10,6 +10,7 @@ int main()
 
 	IOCP iocp;
 	iocp.Run();
+	iocp.Wait();
 
 	return 0;
 }
