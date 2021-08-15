@@ -11,6 +11,8 @@ public:
 	{
 		memset( &( overlapped ), 0, sizeof( OVERLAPPED ) );
 		iocpMode = EIocpMode::MAX;
+		wsaBuf.len = BUF_SIZE;
+		wsaBuf.buf = buffer;
 		clientSock = 0;
 	}
 
@@ -22,7 +24,6 @@ public:
 	char buffer[ BUF_SIZE ];
 	EIocpMode iocpMode;
 	SOCKET clientSock;
-
 };
 
 using OverlappedCustomPtr  = std::shared_ptr< OverlappedCustom >;

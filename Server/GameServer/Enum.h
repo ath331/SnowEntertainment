@@ -5,7 +5,8 @@
 enum class EIocpMode : short
 {
 	ACCEPT,
-	READ,
-	WRITE,
+	RECV,
+	SEND,
+
 	MAX
 };

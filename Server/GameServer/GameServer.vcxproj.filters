@@ -19,6 +19,9 @@
     <Filter Include="Thread">
       <UniqueIdentifier>{91cba2c7-d31e-4629-8e65-816ef59e9aae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Client">
+      <UniqueIdentifier>{b3641917-7a41-4fbb-9cfd-d614cbb29a03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -30,8 +33,8 @@
     <ClCompile Include="Thread\ThreadManager.cpp">
       <Filter>Thread</Filter>
     </ClCompile>
-    <ClCompile Include="OverlappedCustom.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Client\ClientManager.cpp">
+      <Filter>Client</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="OverlappedCustom.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\ClientManager.h">
+      <Filter>Client</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

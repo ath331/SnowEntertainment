@@ -147,9 +147,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Client\ClientManager.cpp" />
     <ClCompile Include="IOCP\IOCP.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="OverlappedCustom.cpp" />
     <ClCompile Include="Thread\ThreadManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +161,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Client\ClientManager.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="IOCP\IOCP.h" />
     <ClInclude Include="OverlappedCustom.h" />

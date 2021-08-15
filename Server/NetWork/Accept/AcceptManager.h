@@ -1,13 +1,19 @@
 #pragma once
+#include "../../GameServer/Client/ClientManager.h"
 
 #include <WinSock2.h>
 
 class AcceptManager
 {
 public:
-	void Accept( SOCKET serverSock );
+	AcceptManager( SOCKET serverSock );
+	~AcceptManager() {};
+
+	void Accept();
+	void ProcessForIOCP( HANDLE completionPort, ClientSocketDataPtr clientData );
 
 private:
+	SOCKET _serverSock;
 
 };
 

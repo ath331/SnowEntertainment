@@ -8,11 +8,13 @@
 #include "../NetWork/Bind/BindManager.h"
 #include "../NetWork/Listen/ListenManager.h"
 
+#include "../OverlappedCustom.h"
+#include "../Client/ClientManager.h"
+
 #include "../Thread/ThreadManager.h"
 
 using namespace std;
 
-unsigned int WINAPI EchoThreadMain( LPVOID CompletionPortIO );
 
 IOCP::IOCP() :
 	CConfigParser("../Ini/GameServer.ini")
@@ -36,7 +38,7 @@ IOCP::IOCP() :
 
 	for ( unsigned short i = 0; i < _iocpThreadCount; i++ )
 	{
-		_ioThreadManager->Add( (HANDLE)_beginthreadex( NULL, 0, EchoThreadMain, (LPVOID)_completionPort, 0, NULL ) );
+		_ioThreadManager->Add( (HANDLE)_beginthreadex( NULL, 0, ProcessIocp, this, 0, NULL ) );
 	}
 
 	_servSock = WSASocket( AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED );
@@ -82,7 +84,7 @@ void IOCP::_ReadyConnect()
 	}
 	_listenManager->Listen( _servSock );
 
-	_acceptManager = new AcceptManager;
+	_acceptManager = new AcceptManager( _servSock );
 	if ( !_acceptManager )
 	{
 		cout << "new accept error" << endl;
@@ -94,34 +96,7 @@ void IOCP::Run()
 {
 	cout << endl <<"[ ----------SERVER RUN---------- ]" << endl;
 
-	unsigned int recvBytes, flags = 0;
-
-	while ( 1 )
-	{
-		SOCKET hClntSock;
-		SOCKADDR_IN clntAdr;
-		int addrLen = sizeof( clntAdr );
-
-		hClntSock = accept( _servSock, (SOCKADDR*)& clntAdr, &addrLen );
-
-		cout << "[ Accept ] SOCKET is " << hClntSock << endl;
-
-		_handleInfo = new PER_HANDLE_DATA;
-		if ( !_handleInfo )
-			continue;
-
-		_handleInfo->hClntSock = hClntSock;
-		memcpy( &( _handleInfo->clntAdr ), &clntAdr, addrLen );
-
-		CreateIoCompletionPort( (HANDLE)hClntSock, _completionPort, ( unsigned long long )_handleInfo, 0 );
-
-		_ioInfo->wsaBuf.len = BUF_SIZE;
-		_ioInfo->wsaBuf.buf = _ioInfo->buffer;
-		_ioInfo->iocpMode = EIocpMode::READ;
-
-		WSARecv( _handleInfo->hClntSock, &( _ioInfo->wsaBuf ),
-			1, (LPDWORD)& recvBytes, (LPDWORD)& flags, &( _ioInfo->overlapped ), NULL );
-	}
+	_acceptManager->Accept();
 }
 
 void IOCP::Wait()
@@ -132,25 +107,28 @@ void IOCP::Wait()
 	WaitForMultipleObjects( threadCount, threadVecPtr->data(), true, INFINITE );
 }
 
-
-unsigned int WINAPI EchoThreadMain( LPVOID pComPort )
+unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 {
-	HANDLE completionPort = (HANDLE)pComPort;
+	IOCP* iocpObject = (IOCP*)iocpPtr;
 	SOCKET sock;
 	DWORD bytesTrans;
-	LPPER_HANDLE_DATA handleInfo = nullptr;
+	ClientSocketDataPtr clientData = nullptr;
 	OverlappedCustomPtr ioInfo = nullptr;
 	DWORD flags = 0;
 
 	while ( 1 )
 	{
-		GetQueuedCompletionStatus( completionPort, &bytesTrans, (PULONG_PTR)&handleInfo, (LPOVERLAPPED*)&ioInfo, INFINITE );
-		if ( !handleInfo || !ioInfo )
+		GetQueuedCompletionStatus( iocpObject->_completionPort, &bytesTrans, (PULONG_PTR)&clientData, (LPOVERLAPPED*)&ioInfo, INFINITE );
+		if ( !clientData || !ioInfo )
 			continue;
 
-		sock = handleInfo->hClntSock;
+		sock = clientData->hClntSock;
 
-		if ( ioInfo->iocpMode == EIocpMode::READ )
+		if ( ioInfo->iocpMode == EIocpMode::ACCEPT )
+		{
+			iocpObject->_acceptManager->ProcessForIOCP( iocpObject->_completionPort, clientData );
+		}
+		else if ( ioInfo->iocpMode == EIocpMode::RECV )
 		{
 			if ( bytesTrans == 0 )    // EOF Àü¼Û ½Ã
 			{
@@ -167,18 +145,18 @@ unsigned int WINAPI EchoThreadMain( LPVOID pComPort )
 
 			memset( &( ioInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
 			ioInfo->wsaBuf.len = bytesTrans;
-			ioInfo->iocpMode = EIocpMode::WRITE;
+			ioInfo->iocpMode = EIocpMode::SEND;
 			WSASend( sock, &( ioInfo->wsaBuf ),
 				1, NULL, 0, &( ioInfo->overlapped ), NULL );
 
 
 			ioInfo->wsaBuf.len = BUF_SIZE;
 			ioInfo->wsaBuf.buf = ioInfo->buffer;
-			ioInfo->iocpMode = EIocpMode::READ;
+			ioInfo->iocpMode = EIocpMode::RECV;
 			WSARecv( sock, &( ioInfo->wsaBuf ),
 				1, NULL, &flags, &( ioInfo->overlapped ), NULL );
 		}
-		else if( ioInfo->iocpMode == EIocpMode::WRITE )
+		else if( ioInfo->iocpMode == EIocpMode::SEND )
 		{
 			cout << "message echo------" << endl;
 		}
