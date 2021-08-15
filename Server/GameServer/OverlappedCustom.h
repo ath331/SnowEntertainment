@@ -26,4 +26,4 @@ public:
 	SOCKET clientSock;
 };
 
-using OverlappedCustomPtr  = std::shared_ptr< OverlappedCustom >;
+using OverlappedCustomPtr = std::shared_ptr< OverlappedCustom >;
