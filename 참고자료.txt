@@ -3,3 +3,7 @@
 경고 수준 무시 : https://oulth.tistory.com/28
 
 WaitForMulitipleobjects 에 vector 주소 넣기 : https://stackoverflow.com/questions/11097059/use-stdvector-in-waitformultipleobjects
+
+SOCKET ERROR number : https://docs.microsoft.com/ko-kr/windows/win32/winsock/windows-sockets-error-codes-2
+
+__LINE__ 컴파일러 해당 라인 잡아주는 매크로 만들기 : https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=dnjsjd11&logNo=220835540920

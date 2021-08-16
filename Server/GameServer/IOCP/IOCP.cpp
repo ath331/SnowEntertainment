@@ -124,11 +124,11 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 
 		sock = clientData->hClntSock;
 
-		if ( ioInfo->iocpMode == EIocpMode::ACCEPT )
+		if ( ioInfo->iocpMode == EIocpMode::IOCP_ACCEPT )
 		{
 			iocpObject->_acceptManager->ProcessForIOCP( iocpObject->_completionPort, clientData );
 		}
-		else if ( ioInfo->iocpMode == EIocpMode::RECV )
+		else if ( ioInfo->iocpMode == EIocpMode::IOCP_RECV )
 		{
 			if ( bytesTrans == 0 )    // EOF Àü¼Û ½Ã
 			{
@@ -145,18 +145,18 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 
 			memset( &( ioInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
 			ioInfo->wsaBuf.len = bytesTrans;
-			ioInfo->iocpMode = EIocpMode::SEND;
+			ioInfo->iocpMode = EIocpMode::IOCP_SEND;
 			WSASend( sock, &( ioInfo->wsaBuf ),
 				1, NULL, 0, &( ioInfo->overlapped ), NULL );
 
 
 			ioInfo->wsaBuf.len = BUF_SIZE;
 			ioInfo->wsaBuf.buf = ioInfo->buffer;
-			ioInfo->iocpMode = EIocpMode::RECV;
+			ioInfo->iocpMode = EIocpMode::IOCP_RECV;
 			WSARecv( sock, &( ioInfo->wsaBuf ),
 				1, NULL, &flags, &( ioInfo->overlapped ), NULL );
 		}
-		else if( ioInfo->iocpMode == EIocpMode::SEND )
+		else if( ioInfo->iocpMode == EIocpMode::IOCP_SEND )
 		{
 			cout << "message echo------" << endl;
 		}

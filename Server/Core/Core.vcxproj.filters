@@ -22,6 +22,9 @@
     <Filter Include="SingleTon">
       <UniqueIdentifier>{0817e8c1-510d-433e-b94b-501bf269b6ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Log">
+      <UniqueIdentifier>{509ada08-facb-4a73-b247-83053cdfcd79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Environment\EnvironmentManager.cpp">
@@ -40,6 +43,9 @@
     </ClInclude>
     <ClInclude Include="SingleTon\UxSingleTon.h">
       <Filter>SingleTon</Filter>
+    </ClInclude>
+    <ClInclude Include="Log\Log.h">
+      <Filter>Log</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
