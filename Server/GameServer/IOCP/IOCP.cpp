@@ -4,6 +4,8 @@
 #include <process.h>
 #include <windows.h>
 
+#include "Log/Log.h"
+
 #include "../NetWork/Accept/AcceptManager.h"
 #include "../NetWork/Bind/BindManager.h"
 #include "../NetWork/Listen/ListenManager.h"
@@ -33,7 +35,7 @@ IOCP::IOCP() :
 	_ioThreadManager = new ThreadManager;
 	if ( !_ioThreadManager )
 	{
-		cout << "new _ioThreadManager error" << endl;
+		ERROR_LOG( "new _ioThreadManager error" );
 	}
 
 	for ( unsigned short i = 0; i < _iocpThreadCount; i++ )
@@ -71,24 +73,21 @@ void IOCP::_ReadyConnect()
 	_bindManager = new BindManager( _serverPORT );
 	if ( !_bindManager )
 	{
-		cout << "new Bind error" << endl;
-		exit( 1 );
+		ERROR_LOG( "new Bind error" );
 	}
 	_bindManager->Bind( _servSock );
 
 	_listenManager = new ListenManager;
 	if ( !_listenManager )
 	{
-		cout << "new Listen error" << endl;
-		exit( 1 );
+		ERROR_LOG( "new Listen error" );
 	}
 	_listenManager->Listen( _servSock );
 
 	_acceptManager = new AcceptManager( _servSock );
 	if ( !_acceptManager )
 	{
-		cout << "new accept error" << endl;
-		exit( 1 );
+		ERROR_LOG( "new Accept error" );
 	}
 }
 
@@ -158,7 +157,7 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 		}
 		else if( ioInfo->iocpMode == EIocpMode::IOCP_SEND )
 		{
-			cout << "message echo------" << endl;
+			COMMON_LOG( "message echo------" );
 		}
 	}
 	return 0;

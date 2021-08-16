@@ -18,7 +18,7 @@ void AcceptManager::Accept()
 	OverlappedCustomPtr overlapped = std::make_shared<OverlappedCustom>();
 	if ( !overlapped )
 	{
-		LOG( "OverlappedCustomPtr make error", ELogType::LOG_COMMON );
+		WARNING_LOG( "OverlappedCustomPtr make error" );
 		return;
 	}
 
@@ -33,7 +33,7 @@ void AcceptManager::Accept()
 		int errorCode = WSAGetLastError();
 		if ( errorCode != WSA_IO_PENDING )
 		{
-			LOG( "AcceptEx() error", ELogType::LOG_WARNING );
+			WARNING_LOG( "AcceptEx() error" );
 			//std::cout << errorCode << std::endl;
 			return;
 		}
@@ -55,7 +55,6 @@ void AcceptManager::ProcessForIOCP( HANDLE completionPort, ClientSocketDataPtr c
 		return;
 
 	std::cout << "[ Accept ] SOCKET is " << clientSock << std::endl;
-	LOG( "[ Accept ] SOCKET is", ELogType::LOG_COMMON );
 
 	ClientSocketDataPtr _handleInfo;
 	if ( !_handleInfo )
