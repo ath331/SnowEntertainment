@@ -15,7 +15,8 @@ AcceptManager::AcceptManager( SOCKET serverSock ) :
 
 void AcceptManager::Accept()
 {
-	OverlappedCustomPtr overlapped = std::make_shared<OverlappedCustom>();
+	//OverlappedCustomPtr overlapped = std::make_shared< OverlappedCustom >();
+	overlapped = new OverlappedCustom;
 	if ( !overlapped )
 	{
 		WARNING_LOG( "OverlappedCustomPtr make error", WSAGetLastError() );
@@ -25,16 +26,15 @@ void AcceptManager::Accept()
 	overlapped->iocpMode = EIocpMode::IOCP_ACCEPT;
 	overlapped->clientSock = WSASocket( AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED );
 
-	if ( AcceptEx( _serverSock, overlapped->clientSock, overlapped->buffer, 0,
+	if ( AcceptEx( _serverSock, overlapped->clientSock, _buf, 0,
 		sizeof( SOCKADDR_IN ) + 16, sizeof( SOCKADDR_IN ) + 16,
-		NULL, (LPOVERLAPPED)& overlapped ) 
+		&_len, (LPOVERLAPPED)&overlapped )
 		== false )
 	{
 		int errorCode = WSAGetLastError();
 		if ( errorCode != WSA_IO_PENDING )
 		{
 			WARNING_LOG( "AcceptEx() error", WSAGetLastError() );
-			//std::cout << errorCode << std::endl;
 			return;
 		}
 	}
