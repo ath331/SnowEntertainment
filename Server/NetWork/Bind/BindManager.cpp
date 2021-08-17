@@ -1,4 +1,5 @@
 #include "BindManager.h"
+#include "../../Core/LogCustom/Log.h"
 
 BindManager::BindManager( string port )
 {
@@ -17,8 +18,7 @@ void BindManager::Bind( SOCKET sock )
 {
 	if ( bind( sock, (SOCKADDR*)& _servAdr, sizeof( _servAdr ) ) != 0 )
 	{
-		cout << "bind() error!" << endl;
-		exit( 1 );
+		ERROR_LOG( "bind() error!", WSAGetLastError() );
 	}
 }
 

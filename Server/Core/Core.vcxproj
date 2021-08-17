@@ -148,7 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Environment\EnvironmentManager.h" />
-    <ClInclude Include="Log\Log.h" />
+    <ClInclude Include="LogCustom\Log.h" />
     <ClInclude Include="Parser\CConfigParser.h" />
     <ClInclude Include="SingleTon\UxSingleTon.h" />
   </ItemGroup>

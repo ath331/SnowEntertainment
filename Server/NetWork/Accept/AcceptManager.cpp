@@ -18,7 +18,7 @@ void AcceptManager::Accept()
 	OverlappedCustomPtr overlapped = std::make_shared<OverlappedCustom>();
 	if ( !overlapped )
 	{
-		WARNING_LOG( "OverlappedCustomPtr make error" );
+		WARNING_LOG( "OverlappedCustomPtr make error", WSAGetLastError() );
 		return;
 	}
 
@@ -33,7 +33,7 @@ void AcceptManager::Accept()
 		int errorCode = WSAGetLastError();
 		if ( errorCode != WSA_IO_PENDING )
 		{
-			WARNING_LOG( "AcceptEx() error" );
+			WARNING_LOG( "AcceptEx() error", WSAGetLastError() );
 			//std::cout << errorCode << std::endl;
 			return;
 		}

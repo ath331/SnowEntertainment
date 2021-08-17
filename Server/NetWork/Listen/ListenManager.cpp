@@ -1,4 +1,5 @@
 #include "ListenManager.h"
+#include "../../Core/LogCustom/Log.h"
 
 #include <iostream>
 
@@ -8,7 +9,6 @@ void ListenManager::Listen( SOCKET sock )
 {
 	if ( listen( sock, 5 ) != 0 )
 	{
-		cout << "listen() error!" << endl;
-		exit( 1 );
+		ERROR_LOG( "listen() error!", WSAGetLastError() );
 	}
 }

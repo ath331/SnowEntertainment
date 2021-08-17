@@ -35,7 +35,7 @@ IOCP::IOCP() :
 	_ioThreadManager = new ThreadManager;
 	if ( !_ioThreadManager )
 	{
-		ERROR_LOG( "new _ioThreadManager error" );
+		ERROR_LOG( "new _ioThreadManager error", WSAGetLastError() );
 	}
 
 	for ( unsigned short i = 0; i < _iocpThreadCount; i++ )
@@ -73,21 +73,21 @@ void IOCP::_ReadyConnect()
 	_bindManager = new BindManager( _serverPORT );
 	if ( !_bindManager )
 	{
-		ERROR_LOG( "new Bind error" );
+		ERROR_LOG( "new Bind error", WSAGetLastError() );
 	}
 	_bindManager->Bind( _servSock );
 
 	_listenManager = new ListenManager;
 	if ( !_listenManager )
 	{
-		ERROR_LOG( "new Listen error" );
+		ERROR_LOG( "new Listen error", WSAGetLastError() );
 	}
 	_listenManager->Listen( _servSock );
 
 	_acceptManager = new AcceptManager( _servSock );
 	if ( !_acceptManager )
 	{
-		ERROR_LOG( "new Accept error" );
+		ERROR_LOG( "new Accept error", WSAGetLastError() );
 	}
 }
 

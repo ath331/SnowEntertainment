@@ -1,11 +1,10 @@
 #pragma once
 #include <stdio.h>
 #include <string>
-#include <winsock2.h>
 
-#define COMMON_LOG( x ) CommonLog ( __FILE__, __LINE__, __FUNCTION__, x )
-#define WARNING_LOG( x ) WarningLog( __FILE__, __LINE__, __FUNCTION__, x )
-#define ERROR_LOG( x ) ErrorLog  ( __FILE__, __LINE__, __FUNCTION__, x )
+#define COMMON_LOG( str ) CommonLog ( __FILE__, __LINE__, __FUNCTION__, str )
+#define WARNING_LOG( str, y ) WarningLog( __FILE__, __LINE__, __FUNCTION__, str, y )
+#define ERROR_LOG( str, y ) ErrorLog  ( __FILE__, __LINE__, __FUNCTION__, str, y )
 
 class Log
 {
@@ -14,7 +13,7 @@ public:
 	virtual ~Log() {}
 
 protected:
-	virtual void _PrintLog( const char* filePath, int lineNum, const char* funcName, const char* msg ) = 0;
+	virtual void _PrintLog( const char* filePath, int lineNum, const char* funcName, const char* msg, int errorNo ) = 0;
 
 protected:
 	std::string _SubStrFilePath( const char* filePath )
@@ -32,15 +31,15 @@ class CommonLog :
 	public Log
 {
 public:
-	CommonLog( const char* filePath, int lineNum, const char* funcName, const char* msg )
+	CommonLog( const char* filePath, int lineNum, const char* funcName, const char* msg, int errorNo = 0 )
 	{
-		_PrintLog( filePath, lineNum, funcName, msg );
+		_PrintLog( filePath, lineNum, funcName, msg, errorNo );
 	}
 
 	~CommonLog() {}
 
 private:
-	virtual void _PrintLog( const char* /*filePath*/, int /*lineNum*/, const char* /*funcName*/, const char* msg )
+	virtual void _PrintLog( const char* /*filePath*/, int /*lineNum*/, const char* /*funcName*/, const char* msg, int /*errorNo*/ )
 	{
 		printf( "[ Log ] %s", msg );
 	}
@@ -51,17 +50,17 @@ class WarningLog :
 	public Log
 {
 public:
-	WarningLog( const char* filePath, int lineNum, const char* funcName, const char* msg )
+	WarningLog( const char* filePath, int lineNum, const char* funcName, const char* msg, int errorNo )
 	{
-		_PrintLog( filePath, lineNum, funcName, msg );
+		_PrintLog( filePath, lineNum, funcName, msg, errorNo );
 	}
 
 	~WarningLog() {}
 
 private:
-	virtual void _PrintLog( const char* filePath, int lineNum, const char* funcName, const char* msg )
+	virtual void _PrintLog( const char* filePath, int lineNum, const char* funcName, const char* msg, int errorNo )
 	{
-		printf( "[ WARNING ] %s:%d, %s() Func \"%s\" ErrorNo : %d ", _SubStrFilePath( filePath ).c_str(), lineNum, funcName, msg, WSAGetLastError() );
+		printf( "[ WARNING ] %s:%d, %s() Func \"%s\" ErrorNo : %d ", _SubStrFilePath( filePath ).c_str(), lineNum, funcName, msg, errorNo );
 	}
 };
 
@@ -70,17 +69,17 @@ class ErrorLog :
 	public Log
 {
 public:
-	ErrorLog( const char* filePath, int lineNum, const char* funcName, const char* msg )
+	ErrorLog( const char* filePath, int lineNum, const char* funcName, const char* msg, int errorNo )
 	{
-		_PrintLog( filePath, lineNum, funcName, msg );
+		_PrintLog( filePath, lineNum, funcName, msg, errorNo );
 	}
 
 	~ErrorLog() {}
 
 private:
-	virtual void _PrintLog( const char* filePath, int lineNum, const char* funcName, const char* msg )
+	virtual void _PrintLog( const char* filePath, int lineNum, const char* funcName, const char* msg, int errorNo )
 	{
-		printf( "[ ERROR ] %s:%d, %s() Func \"%s\" ErrorNo : %d ", _SubStrFilePath( filePath ).c_str(), lineNum, funcName, msg, WSAGetLastError() );
+		printf( "[ ERROR ] %s:%d, %s() Func \"%s\" ErrorNo : %d ", _SubStrFilePath( filePath ).c_str(), lineNum, funcName, msg, errorNo );
 		exit( 1 );
 	}
 };

@@ -44,7 +44,7 @@
     <ClInclude Include="SingleTon\UxSingleTon.h">
       <Filter>SingleTon</Filter>
     </ClInclude>
-    <ClInclude Include="Log\Log.h">
+    <ClInclude Include="LogCustom\Log.h">
       <Filter>Log</Filter>
     </ClInclude>
   </ItemGroup>
