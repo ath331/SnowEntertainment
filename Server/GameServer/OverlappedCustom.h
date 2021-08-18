@@ -35,7 +35,7 @@ public:
 	char buffer[ BUF_SIZE ];
 	EIocpMode iocpMode;
 	SOCKET clientSock;
-	int len;
+	DWORD len;
 };
 
 using OverlappedCustomPtr = std::shared_ptr< OverlappedCustom >;

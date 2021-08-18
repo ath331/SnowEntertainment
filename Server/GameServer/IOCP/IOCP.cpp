@@ -84,7 +84,7 @@ void IOCP::_ReadyConnect()
 	}
 	_listenManager->Listen( _servSock );
 
-	_acceptManager = new AcceptManager( _servSock );
+	_acceptManager = new AcceptManager( _servSock, _completionPort );
 	if ( !_acceptManager )
 	{
 		ERROR_LOG( "new Accept error", WSAGetLastError() );
@@ -125,7 +125,7 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 
 		if ( ioInfo->iocpMode == EIocpMode::IOCP_ACCEPT )
 		{
-			iocpObject->_acceptManager->ProcessForIOCP( iocpObject->_completionPort, clientData );
+			iocpObject->_acceptManager->ProcessForIOCP( clientData );
 		}
 		else if ( ioInfo->iocpMode == EIocpMode::IOCP_RECV )
 		{
