@@ -29,9 +29,15 @@ public:
 
 	~OverlappedCustom() {};
 
-	void Init(EIocpMode iocp)
+	void Init( EIocpMode iocp )
 	{
 		iocpMode = iocp;
+		memset(&(overlapped), 0, sizeof(OVERLAPPED));
+		memset(buffer, 0, sizeof(buffer));
+		wsaBuf.len = BUF_SIZE;
+		wsaBuf.buf = buffer;
+		clientSock = 0;
+		len = 0;
 	}
 
 public:

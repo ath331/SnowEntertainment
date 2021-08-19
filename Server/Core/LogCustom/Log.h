@@ -41,7 +41,7 @@ public:
 private:
 	virtual void _PrintLog( const char* /*filePath*/, int /*lineNum*/, const char* /*funcName*/, const char* msg, int /*errorNo*/ )
 	{
-		printf( "[ Log ] %s", msg );
+		printf( "[ Log ] %s \n", msg );
 	}
 };
 

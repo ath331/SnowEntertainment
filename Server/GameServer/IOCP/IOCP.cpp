@@ -119,9 +119,12 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 	{
 		GetQueuedCompletionStatus( iocpObject->_completionPort, &bytesTrans, &sock, (LPOVERLAPPED*)&ioInfo, INFINITE );
 
+		if ( !ioInfo )
+			continue;
+
 		if ( ioInfo->iocpMode == EIocpMode::IOCP_ACCEPT )
 		{
-			iocpObject->_acceptManager->ProcessForIOCP(ioInfo->clientSock );
+			iocpObject->_acceptManager->ProcessForIOCP( ioInfo->clientSock );
 		}
 		else if ( ioInfo->iocpMode == EIocpMode::IOCP_RECV )
 		{
@@ -129,6 +132,9 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 			{
 				cout << "[ Close ] SOCKET is " << sock << endl;
 				closesocket( sock );
+
+				if (!ioInfo)
+					delete(ioInfo);
 
 				continue;
 			}
@@ -138,11 +144,12 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 
 			cout << "[ " << sock << " ] " << message;
 
-			memset( &( ioInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
-			ioInfo->wsaBuf.len = bytesTrans;
-			ioInfo->iocpMode = EIocpMode::IOCP_SEND;
-			WSASend( sock, &( ioInfo->wsaBuf ),
-				1, NULL, 0, &( ioInfo->overlapped ), NULL );
+			OverlappedCustom* sendIoInfo = new OverlappedCustom;
+			memset( &(sendIoInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
+			sendIoInfo->wsaBuf.len = bytesTrans;
+			sendIoInfo->iocpMode = EIocpMode::IOCP_SEND;
+			WSASend( sock, &(sendIoInfo->wsaBuf ),
+				1, NULL, 0, &(sendIoInfo->overlapped ), NULL );
 
 
 			ioInfo->wsaBuf.len = BUF_SIZE;
@@ -150,11 +157,15 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 			ioInfo->iocpMode = EIocpMode::IOCP_RECV;
 			WSARecv( sock, &( ioInfo->wsaBuf ),
 				1, NULL, &flags, &( ioInfo->overlapped ), NULL );
+
 		}
 		else if( ioInfo->iocpMode == EIocpMode::IOCP_SEND )
 		{
 			COMMON_LOG( "message echo------" );
 		}
+
+		if (!ioInfo)
+			delete( ioInfo );
 	}
 	return 0;
 }

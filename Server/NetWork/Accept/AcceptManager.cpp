@@ -18,6 +18,7 @@ AcceptManager::AcceptManager( SOCKET serverSock, HANDLE completionPort ) :
 
 void AcceptManager::Accept()
 {
+	overlapped.Init( EIocpMode::IOCP_ACCEPT );
 	overlapped.clientSock = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
 
 	if ( AcceptEx( _serverSock, overlapped.clientSock, _buf, 0,
@@ -47,6 +48,7 @@ void AcceptManager::ProcessForIOCP( SOCKET sock )
 	if ( !overlapped )
 		return;
 
+	overlapped->clientSock = clientSock;
 	overlapped->wsaBuf.len = BUF_SIZE;
 	overlapped->wsaBuf.buf = overlapped->buffer;
 	overlapped->iocpMode = EIocpMode::IOCP_RECV;
