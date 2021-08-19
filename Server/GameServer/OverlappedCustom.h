@@ -29,6 +29,11 @@ public:
 
 	~OverlappedCustom() {};
 
+	void Init(EIocpMode iocp)
+	{
+		iocpMode = iocp;
+	}
+
 public:
 	OVERLAPPED overlapped;
 	WSABUF wsaBuf;

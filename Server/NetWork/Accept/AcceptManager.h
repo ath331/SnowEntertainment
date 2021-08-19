@@ -12,7 +12,7 @@ public:
 	~AcceptManager() {};
 
 	void Accept();
-	void ProcessForIOCP( ClientSocketDataPtr clientData );
+	void ProcessForIOCP( SOCKET sock );
 
 private:
 	OverlappedCustom overlapped;
@@ -20,6 +20,6 @@ private:
 	HANDLE _completionPort;
 
 	char _buf[ 1024 ];
-	DWORD _len = 10;
+	DWORD _len = 0;
 };
 
