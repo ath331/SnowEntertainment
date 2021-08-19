@@ -39,27 +39,19 @@ void AcceptManager::ProcessForIOCP( SOCKET sock )
 	unsigned int recvBytes, flags = 0;
 
 	SOCKET clientSock = sock;
-	//int addrLen = sizeof( clientData->clntAdr );
 
 	std::cout << "[ Accept ] SOCKET is " << clientSock << std::endl;
 	CreateIoCompletionPort((HANDLE)clientSock, _completionPort, clientSock, 0);
-
-	ClientSocketData* _handleInfo = new ClientSocketData;
-	if ( !_handleInfo )
-		return;
 
 	OverlappedCustom* overlapped = new OverlappedCustom;
 	if ( !overlapped )
 		return;
 
-	_handleInfo->hClntSock = clientSock;
-	//memcpy( &( _handleInfo->clntAdr ), &clientData->clntAdr, addrLen );
-
 	overlapped->wsaBuf.len = BUF_SIZE;
 	overlapped->wsaBuf.buf = overlapped->buffer;
 	overlapped->iocpMode = EIocpMode::IOCP_RECV;
 
-	WSARecv( _handleInfo->hClntSock, &( overlapped->wsaBuf ),
+	WSARecv( clientSock, &( overlapped->wsaBuf ),
 		1, (LPDWORD)& recvBytes, (LPDWORD)& flags, &( overlapped->overlapped ), NULL );
 
 	Accept();

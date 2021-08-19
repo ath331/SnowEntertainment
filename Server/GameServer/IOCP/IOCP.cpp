@@ -44,7 +44,7 @@ IOCP::IOCP() :
 	}
 
 	_servSock = WSASocket( AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED );
-	CreateIoCompletionPort( (HANDLE)_servSock, _completionPort, _servSock, 0 );
+	CreateIoCompletionPort( (HANDLE)_servSock, _completionPort, NULL, 0 );
 
 	_ReadyConnect();
 }
@@ -113,7 +113,7 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 	SOCKET sock;
 	DWORD bytesTrans;
 	OverlappedCustom* ioInfo = nullptr;
-	//DWORD flags = 0;
+	DWORD flags = 0;
 
 	while ( 1 )
 	{
@@ -121,9 +121,9 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 
 		if ( ioInfo->iocpMode == EIocpMode::IOCP_ACCEPT )
 		{
-			iocpObject->_acceptManager->ProcessForIOCP(sock);
+			iocpObject->_acceptManager->ProcessForIOCP(ioInfo->clientSock );
 		}
-		/*else if ( ioInfo.iocpMode == EIocpMode::IOCP_RECV )
+		else if ( ioInfo->iocpMode == EIocpMode::IOCP_RECV )
 		{
 			if ( bytesTrans == 0 )    // EOF Àü¼Û ½Ã
 			{
@@ -133,7 +133,7 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 				continue;
 			}
 
-			string message = ioInfo.wsaBuf.buf;
+			string message = ioInfo->wsaBuf.buf;
 			message = message.substr( 0, bytesTrans );
 
 			cout << "[ " << sock << " ] " << message;
@@ -149,12 +149,12 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 			ioInfo->wsaBuf.buf = ioInfo->buffer;
 			ioInfo->iocpMode = EIocpMode::IOCP_RECV;
 			WSARecv( sock, &( ioInfo->wsaBuf ),
-				1, NULL, &flags, &( ioInfo->overlapped ), NULL );*/
-		//}
-		/*else if( ioInfo->iocpMode == EIocpMode::IOCP_SEND )
+				1, NULL, &flags, &( ioInfo->overlapped ), NULL );
+		}
+		else if( ioInfo->iocpMode == EIocpMode::IOCP_SEND )
 		{
 			COMMON_LOG( "message echo------" );
-		}*/
+		}
 	}
 	return 0;
 }
