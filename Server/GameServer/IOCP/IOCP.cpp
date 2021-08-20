@@ -15,8 +15,9 @@
 
 #include "../Thread/ThreadManager.h"
 
-using namespace std;
+#pragma warning(disable:4996)
 
+using namespace std;
 
 IOCP::IOCP() :
 	CConfigParser("../Ini/GameServer.ini")
@@ -145,7 +146,10 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 			cout << "[ " << sock << " ] " << message;
 
 			OverlappedCustom* sendIoInfo = new OverlappedCustom;
-			memset( &(sendIoInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
+			memset( &( sendIoInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
+
+			strcpy( sendIoInfo ->buffer, message.c_str() );
+
 			sendIoInfo->wsaBuf.len = bytesTrans;
 			sendIoInfo->iocpMode = EIocpMode::IOCP_SEND;
 			WSASend( sock, &(sendIoInfo->wsaBuf ),
