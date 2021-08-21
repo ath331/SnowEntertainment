@@ -9,3 +9,5 @@ SOCKET ERROR number : https://docs.microsoft.com/ko-kr/windows/win32/winsock/win
 __LINE__ 컴파일러 해당 라인 잡아주는 매크로 만들기 : https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=dnjsjd11&logNo=220835540920
 
 string to char[], char[] to string : https://danco.tistory.com/69
+
+서밋로그 저장용
