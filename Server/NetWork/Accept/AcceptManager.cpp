@@ -1,6 +1,7 @@
 #include "AcceptManager.h"
 #include "../../Core/LogCustom/Log.h"
 #include "../../GameServer/OverlappedCustom.h"
+#include "..//Session/TcpSession.h"
 
 #include <iostream>
 #include <MSWSock.h>
@@ -35,26 +36,15 @@ void AcceptManager::Accept()
 	}
 }
 
-void AcceptManager::ProcessForIOCP( SOCKET sock )
+void AcceptManager::ProcessForIOCP( SOCKET clientSock )
 {
-	unsigned int recvBytes, flags = 0;
-
-	SOCKET clientSock = sock;
-
 	std::cout << "[ Accept ] SOCKET is " << clientSock << std::endl;
-	CreateIoCompletionPort((HANDLE)clientSock, _completionPort, clientSock, 0);
 
-	OverlappedCustom* overlapped = new OverlappedCustom;
-	if ( !overlapped )
-		return;
+	TcpSession* session = new TcpSession( clientSock );
 
-	overlapped->clientSock = clientSock;
-	overlapped->wsaBuf.len = BUF_SIZE;
-	overlapped->wsaBuf.buf = overlapped->buffer;
-	overlapped->iocpMode = EIocpMode::IOCP_RECV;
+	CreateIoCompletionPort((HANDLE)clientSock, _completionPort, (ULONG_PTR)session, 0);
 
-	WSARecv( clientSock, &( overlapped->wsaBuf ),
-		1, (LPDWORD)& recvBytes, (LPDWORD)& flags, &( overlapped->overlapped ), NULL );
+	session->_PostRecv();
 
 	Accept();
 }

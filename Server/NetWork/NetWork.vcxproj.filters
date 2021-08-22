@@ -22,6 +22,9 @@
     <Filter Include="Listen">
       <UniqueIdentifier>{4e60fa2d-17b2-40e5-9153-994315cf24a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Session">
+      <UniqueIdentifier>{3eb7c04e-fec2-45dc-8a20-acb2d812794a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Accept\AcceptManager.cpp">
@@ -32,6 +35,9 @@
     </ClCompile>
     <ClCompile Include="Listen\ListenManager.cpp">
       <Filter>Listen</Filter>
+    </ClCompile>
+    <ClCompile Include="Session\TcpSession.cpp">
+      <Filter>Session</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="NetWork.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Session\TcpSession.h">
+      <Filter>Session</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

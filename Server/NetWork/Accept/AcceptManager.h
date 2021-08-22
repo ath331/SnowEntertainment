@@ -12,7 +12,7 @@ public:
 	~AcceptManager() {};
 
 	void Accept();
-	void ProcessForIOCP( SOCKET sock );
+	void ProcessForIOCP( SOCKET clientSock );
 
 private:
 	OverlappedCustom overlapped;

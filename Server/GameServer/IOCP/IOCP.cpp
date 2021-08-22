@@ -9,13 +9,12 @@
 #include "../NetWork/Accept/AcceptManager.h"
 #include "../NetWork/Bind/BindManager.h"
 #include "../NetWork/Listen/ListenManager.h"
+#include "../NetWork/Session/TcpSession.h"
 
 #include "../OverlappedCustom.h"
 #include "../Client/ClientManager.h"
 
 #include "../Thread/ThreadManager.h"
-
-#pragma warning(disable:4996)
 
 using namespace std;
 
@@ -111,65 +110,42 @@ void IOCP::Wait()
 unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 {
 	IOCP* iocpObject = (IOCP*)iocpPtr;
-	SOCKET sock;
+	TcpSession* clientSession = nullptr;
 	DWORD bytesTrans;
 	OverlappedCustom* ioInfo = nullptr;
-	DWORD flags = 0;
 
 	while ( 1 )
 	{
-		GetQueuedCompletionStatus( iocpObject->_completionPort, &bytesTrans, &sock, (LPOVERLAPPED*)&ioInfo, INFINITE );
+		GetQueuedCompletionStatus( iocpObject->_completionPort, &bytesTrans, (PULONG_PTR)&clientSession, (LPOVERLAPPED*)&ioInfo, INFINITE );
 
 		if ( !ioInfo )
 			continue;
 
-		if ( ioInfo->iocpMode == EIocpMode::IOCP_ACCEPT )
+		if ( ioInfo->iocpMode != EIocpMode::IOCP_ACCEPT && !clientSession )
+			continue;
+
+
+		switch ( ioInfo->iocpMode )
 		{
+		case EIocpMode::IOCP_ACCEPT:
 			iocpObject->_acceptManager->ProcessForIOCP( ioInfo->clientSock );
-		}
-		else if ( ioInfo->iocpMode == EIocpMode::IOCP_RECV )
-		{
-			if ( bytesTrans == 0 )    // EOF Àü¼Û ½Ã
-			{
-				cout << "[ Close ] SOCKET is " << sock << endl;
-				closesocket( sock );
+			break;
 
-				if (!ioInfo)
-					delete(ioInfo);
+		case EIocpMode::IOCP_RECV:
+			clientSession->ProcessRecvForIOCP( bytesTrans );
+			break;
 
-				continue;
-			}
-
-			string message = ioInfo->wsaBuf.buf;
-			message = message.substr( 0, bytesTrans );
-
-			cout << "[ " << sock << " ] " << message;
-
-			OverlappedCustom* sendIoInfo = new OverlappedCustom;
-			memset( &( sendIoInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
-
-			strcpy( sendIoInfo ->buffer, message.c_str() );
-
-			sendIoInfo->wsaBuf.len = bytesTrans;
-			sendIoInfo->iocpMode = EIocpMode::IOCP_SEND;
-			WSASend( sock, &(sendIoInfo->wsaBuf ),
-				1, NULL, 0, &(sendIoInfo->overlapped ), NULL );
-
-
-			ioInfo->wsaBuf.len = BUF_SIZE;
-			ioInfo->wsaBuf.buf = ioInfo->buffer;
-			ioInfo->iocpMode = EIocpMode::IOCP_RECV;
-			WSARecv( sock, &( ioInfo->wsaBuf ),
-				1, NULL, &flags, &( ioInfo->overlapped ), NULL );
-
-		}
-		else if( ioInfo->iocpMode == EIocpMode::IOCP_SEND )
-		{
+		case EIocpMode::IOCP_SEND:
 			COMMON_LOG( "message echo------" );
+			break;
+
+		default:
+			break;
 		}
 
 		if (!ioInfo)
 			delete( ioInfo );
 	}
+
 	return 0;
 }

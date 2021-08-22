@@ -146,12 +146,14 @@
     <ClCompile Include="Accept\AcceptManager.cpp" />
     <ClCompile Include="Bind\BindManager.cpp" />
     <ClCompile Include="Listen\ListenManager.cpp" />
+    <ClCompile Include="Session\TcpSession.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Accept\AcceptManager.h" />
     <ClInclude Include="Bind\BindManager.h" />
     <ClInclude Include="Listen\ListenManager.h" />
     <ClInclude Include="NetWork.h" />
+    <ClInclude Include="Session\TcpSession.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

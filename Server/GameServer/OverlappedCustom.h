@@ -48,5 +48,3 @@ public:
 	SOCKET clientSock;
 	DWORD len;
 };
-
-using OverlappedCustomPtr = std::shared_ptr< OverlappedCustom >;
