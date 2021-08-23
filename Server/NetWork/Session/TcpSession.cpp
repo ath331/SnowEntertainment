@@ -33,11 +33,12 @@ void TcpSession::_PostRecv()
 
 void TcpSession::_PostSend( DWORD bytesTrans )
 {
+	//TOOD : 이미 전송중일떄는 바로 전송이 되나?? 전송중인 상태와 전송대기 상태를 만들어야하나?
+
 	string message = "Test \n";
 	strcpy( _sendOverlapped.buffer, message.c_str() );
-
 	_sendOverlapped.wsaBuf.len = (ULONG)message.length();
-	_sendOverlapped.iocpMode = EIocpMode::IOCP_SEND;
+
 	WSASend( _sock, &( _sendOverlapped.wsaBuf ),
 		1, NULL, 0, &( _sendOverlapped.overlapped ), NULL );
 }

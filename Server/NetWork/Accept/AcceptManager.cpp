@@ -40,8 +40,7 @@ void AcceptManager::ProcessForIOCP( SOCKET clientSock )
 {
 	std::cout << "[ Accept ] SOCKET is " << clientSock << std::endl;
 
-	TcpSession* session = new TcpSession( clientSock );
-
+	TcpSession* session = new TcpSession( clientSock ); //TODO : clientSession을 따로 저장해 놔야할듯?
 	CreateIoCompletionPort((HANDLE)clientSock, _completionPort, (ULONG_PTR)session, 0);
 
 	session->_PostRecv();

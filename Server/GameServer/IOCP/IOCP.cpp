@@ -25,7 +25,7 @@ IOCP::IOCP() :
 	_serverPORT      = GetString( "SERVER_PORT"       );
 	_iocpThreadCount = GetInt   ( "IOCP_THREAD_COUNT" );
 
-	cout << "[ IOCP Setting ]" << endl;
+	cout << "[ IOCP Setting ]\n";
 	cout << "IP   : "          << _serverIP        << endl;
 	cout << "PORT : "          << _serverPORT      << endl;
 	cout << "IoThreadCount : " << _iocpThreadCount << endl;
