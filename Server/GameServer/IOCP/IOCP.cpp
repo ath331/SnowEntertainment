@@ -109,12 +109,12 @@ void IOCP::Wait()
 
 unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 {
-	IOCP* iocpObject = (IOCP*)iocpPtr;
-	TcpSession* clientSession = nullptr;
-	DWORD bytesTrans;
-	OverlappedCustom* ioInfo = nullptr;
+	IOCP*             iocpObject    = (IOCP*)iocpPtr;
+	DWORD             bytesTrans    = 0;
+	TcpSession*       clientSession = nullptr;
+	OverlappedCustom* ioInfo        = nullptr;
 
-	while ( 1 )
+	while ( true )
 	{
 		GetQueuedCompletionStatus( iocpObject->_completionPort, &bytesTrans, (PULONG_PTR)&clientSession, (LPOVERLAPPED*)&ioInfo, INFINITE );
 
@@ -136,15 +136,12 @@ unsigned int WINAPI IOCP::ProcessIocp( LPVOID iocpPtr )
 			break;
 
 		case EIocpMode::IOCP_SEND:
-			COMMON_LOG( "message echo------" );
+			clientSession->ProcessSendForIOCP();
 			break;
 
 		default:
 			break;
 		}
-
-		if (!ioInfo)
-			delete( ioInfo );
 	}
 
 	return 0;

@@ -11,10 +11,13 @@ public:
 		_sock( sock )
 	{
 		_recvOverlapped.Init( EIocpMode::IOCP_RECV );
-
 		_recvOverlapped.wsaBuf.len = BUF_SIZE;
 		_recvOverlapped.wsaBuf.buf = _recvBuf;
 		_recvFlag = 0;
+
+		_sendOverlapped.Init( EIocpMode::IOCP_SEND );
+		_recvOverlapped.wsaBuf.len = BUF_SIZE;
+		_recvOverlapped.wsaBuf.buf = _sendBuf;
 	}
 
 	~TcpSession() {}
@@ -32,9 +35,14 @@ private:
 	char _recvBuf[ BUF_SIZE ];
 	DWORD _recvFlag;
 
+	OverlappedCustom _sendOverlapped;
+	char _sendBuf[ BUF_SIZE ];
+
+
 private:
 	void _Close();
 	void _PostRecv();
+	void _PostSend( DWORD bytesTrans );
 
 private:
 	friend AcceptManager;

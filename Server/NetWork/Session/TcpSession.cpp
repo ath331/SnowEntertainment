@@ -31,6 +31,18 @@ void TcpSession::_PostRecv()
 		1, NULL, &_recvFlag, &( _recvOverlapped.overlapped ), NULL );
 }
 
+void TcpSession::_PostSend( DWORD bytesTrans )
+{
+	string message = "Test \n";
+	strcpy( _sendOverlapped.buffer, message.c_str() );
+
+	_sendOverlapped.wsaBuf.len = (ULONG)message.length();
+	_sendOverlapped.iocpMode = EIocpMode::IOCP_SEND;
+	WSASend( _sock, &( _sendOverlapped.wsaBuf ),
+		1, NULL, 0, &( _sendOverlapped.overlapped ), NULL );
+}
+
+
 void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 {
 	if ( bytesTrans == 0 )    // EOF 전송 시
@@ -42,22 +54,11 @@ void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 
 	//TCP 수신 특성 생각하기
 
-	string message = "Test\n";
-
-	OverlappedCustom* sendIoInfo = new OverlappedCustom;
-	memset( &( sendIoInfo->overlapped ), 0, sizeof( OVERLAPPED ) );
-
-	strcpy( sendIoInfo->buffer, message.c_str() );
-
-	sendIoInfo->wsaBuf.len = bytesTrans;
-	sendIoInfo->iocpMode = EIocpMode::IOCP_SEND;
-	WSASend( _sock, &( sendIoInfo->wsaBuf ),
-		1, NULL, 0, &( sendIoInfo->overlapped ), NULL );
-
 	_PostRecv();
+	_PostSend( bytesTrans );
 }
 
 void TcpSession::ProcessSendForIOCP()
 {
-	
+	COMMON_LOG( "message echo------" );
 }

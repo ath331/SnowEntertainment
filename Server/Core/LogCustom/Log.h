@@ -6,6 +6,8 @@
 #define WARNING_LOG( str, y ) WarningLog( __FILE__, __LINE__, __FUNCTION__, str, y )
 #define ERROR_LOG( str, y ) ErrorLog  ( __FILE__, __LINE__, __FUNCTION__, str, y )
 
+#pragma warning(disable:26444)
+
 class Log
 {
 public:
