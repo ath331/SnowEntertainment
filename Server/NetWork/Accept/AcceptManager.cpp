@@ -11,7 +11,7 @@
 AcceptManager::AcceptManager( SOCKET serverSock, HANDLE completionPort ) :
 	_serverSock( serverSock ), _completionPort( completionPort )
 {
-	overlapped.Init( EIocpMode::IOCP_ACCEPT );
+	_overlapped.Init( EIocpMode::IOCP_ACCEPT );
 
 	memset(_buf, 0, sizeof(_buf));
 	_len = 0;
@@ -19,12 +19,12 @@ AcceptManager::AcceptManager( SOCKET serverSock, HANDLE completionPort ) :
 
 void AcceptManager::Accept()
 {
-	overlapped.Init( EIocpMode::IOCP_ACCEPT );
-	overlapped.clientSock = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+	_overlapped.Init( EIocpMode::IOCP_ACCEPT );
+	_overlapped.clientSock = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
 
-	if ( AcceptEx( _serverSock, overlapped.clientSock, _buf, 0,
+	if ( AcceptEx( _serverSock, _overlapped.clientSock, _buf, 0,
 		sizeof( SOCKADDR_IN ) + 16, sizeof( SOCKADDR_IN ) + 16,
-		&_len, (LPOVERLAPPED)&overlapped )
+		&_len, (LPOVERLAPPED)& _overlapped )
 		== false )
 	{
 		int errorCode = WSAGetLastError();

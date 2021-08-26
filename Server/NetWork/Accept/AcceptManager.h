@@ -15,11 +15,11 @@ public:
 	void ProcessForIOCP( SOCKET clientSock );
 
 private:
-	OverlappedCustom overlapped;
+	OverlappedCustom _overlapped;
 	SOCKET _serverSock;
 	HANDLE _completionPort;
 
-	char _buf[ 1024 ];
+	char _buf[ BUF_SIZE ];
 	DWORD _len = 0;
 };
 
