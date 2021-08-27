@@ -27,7 +27,7 @@ void TcpSession::_PostRecv()
 {
 	//TODO : offset을 만들어서 기존에 받았던 데이터에 이어서 받기.
 
-	WSARecv( _sock, &( _recvOverlapped.wsaBuf ),
+	WSARecv( _sock, &(_recvOverlapped.wsaBuf ),
 		1, NULL, &_recvFlag, &( _recvOverlapped.overlapped ), NULL );
 }
 
@@ -53,10 +53,20 @@ void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 		return;
 	}
 
+	_recvOffset += bytesTrans;
+
+	if ( _recvOffset < 3 ) //동작 테스트를 위해 임시 길이 3으로 설정
+	{
+		_PostRecv();
+		return;
+	}
+
 	//TCP 수신 특성 생각하기
 
 	_PostRecv();
 	_PostSend( bytesTrans );
+
+	_recvOffset -= _recvOffset; //동작 테스트를 위해 임시 길이. 패킷길이만큼 수신했으면 패킷크기를 뺴준다.
 }
 
 void TcpSession::ProcessSendForIOCP()

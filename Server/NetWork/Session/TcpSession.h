@@ -13,7 +13,8 @@ public:
 		_recvOverlapped.Init( EIocpMode::IOCP_RECV );
 		_recvOverlapped.wsaBuf.len = BUF_SIZE;
 		_recvOverlapped.wsaBuf.buf = _recvBuf;
-		_recvFlag = 0;
+		_recvFlag   = 0;
+		_recvOffset = 0;
 
 		_sendOverlapped.Init( EIocpMode::IOCP_SEND );
 		_recvOverlapped.wsaBuf.len = BUF_SIZE;
@@ -32,8 +33,9 @@ private:
 	SOCKET _sock; //clientSock
 
 	OverlappedCustom _recvOverlapped;
-	char _recvBuf[ BUF_SIZE ];
+	char  _recvBuf[ BUF_SIZE ];
 	DWORD _recvFlag;
+	DWORD _recvOffset;  //recv데이터를 받을 위치
 
 	OverlappedCustom _sendOverlapped;
 	char _sendBuf[ BUF_SIZE ];
