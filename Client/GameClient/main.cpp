@@ -26,7 +26,7 @@ int main( int argc, char* argv[] )
 	if ( argc != 3 ) 
 	{
 		cout << "Not Setting IP or PORT."           << endl;
-		cout << "Serring defaultIP and defaultPORT" << endl;
+		cout << "Setting defaultIP and defaultPORT" << endl;
 		cout << "IP   : " << defaultIP              << endl;
 		cout << "Port : " << defaultPORT            <<endl;
 
