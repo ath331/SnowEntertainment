@@ -2,4 +2,3 @@
 
 SnowEntertainment 
 
-속상
