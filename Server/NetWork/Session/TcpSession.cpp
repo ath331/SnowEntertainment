@@ -27,8 +27,14 @@ void TcpSession::_PostRecv()
 {
 	//TODO : offset을 만들어서 기존에 받았던 데이터에 이어서 받기.
 
-	WSARecv( _sock, &(_recvOverlapped.wsaBuf ),
-		1, NULL, &_recvFlag, &( _recvOverlapped.overlapped ), NULL );
+	WSARecv( 
+		_sock, 
+		(LPWSABUF)_recvOverlapped.wsaBuf.buf[ _recvOffset ],
+		1, 
+		NULL, 
+		&_recvFlag, 
+		&( _recvOverlapped.overlapped ), 
+		NULL );
 }
 
 void TcpSession::_PostSend( DWORD bytesTrans )
@@ -39,8 +45,14 @@ void TcpSession::_PostSend( DWORD bytesTrans )
 	strcpy( _sendOverlapped.buffer, message.c_str() );
 	_sendOverlapped.wsaBuf.len = (ULONG)message.length();
 
-	WSASend( _sock, &( _sendOverlapped.wsaBuf ),
-		1, NULL, 0, &( _sendOverlapped.overlapped ), NULL );
+	WSASend( 
+		_sock, 
+		&( _sendOverlapped.wsaBuf ),
+		1, 
+		NULL, 
+		0, 
+		&( _sendOverlapped.overlapped ), 
+		NULL );
 }
 
 
