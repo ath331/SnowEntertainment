@@ -55,17 +55,17 @@ int main( int argc, char* argv[] )
 	while ( 1 )
 	{
 		message.clear();
-		fputs( "Input message(Q to quit): ", stdout );
+		fputs( "Input message( end to quit ): ", stdout );
 		cin >> message;
 
-		if ( !strcmp( message.c_str(), "q" ) || !strcmp( message.c_str(), "Q" ) )
+		if ( !strcmp( message.c_str(), "end" ) )
 			break;
 
 		int sendLen = message.size();
 		send( hSocket, message.c_str(), sendLen, 0 );
-		strLen = recv( hSocket, recvBuf, BUF_SIZE - 1, 0 );
+		/*strLen = recv( hSocket, recvBuf, BUF_SIZE - 1, 0 );
 		message[ strLen ] = 0;
-		printf( "Message from server: %s \n", recvBuf );
+		printf( "Message from server: %s \n", recvBuf );*/
 	}
 
 	closesocket( hSocket );
