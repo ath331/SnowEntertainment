@@ -25,16 +25,23 @@ void TcpSession::_Close()
 
 void TcpSession::_PostRecv()
 {
-	//TODO : offset을 만들어서 기존에 받았던 데이터에 이어서 받기.
+	strcat( _recvTempBuf, _recvOverlapped.wsaBuf.buf );
 
-	WSARecv( 
-		_sock, 
-		(LPWSABUF)_recvOverlapped.wsaBuf.buf[ _recvOffset ],
-		1, 
-		NULL, 
-		&_recvFlag, 
-		&( _recvOverlapped.overlapped ), 
-		NULL );
+	if ( SOCKET_ERROR == WSARecv(
+		_sock,
+		&_recvOverlapped.wsaBuf,
+		1,
+		NULL,
+		&_recvFlag,
+		&( _recvOverlapped.overlapped ),
+		NULL ) )
+	{
+		int error = WSAGetLastError();
+		if ( error != WSA_IO_PENDING )
+		{
+			WARNING_LOG( "WSARECV ERROR", error );
+		}
+	}
 }
 
 void TcpSession::_PostSend( DWORD bytesTrans )
@@ -45,14 +52,21 @@ void TcpSession::_PostSend( DWORD bytesTrans )
 	strcpy( _sendOverlapped.buffer, message.c_str() );
 	_sendOverlapped.wsaBuf.len = (ULONG)message.length();
 
-	WSASend( 
-		_sock, 
+	if ( SOCKET_ERROR == WSASend(
+		_sock,
 		&( _sendOverlapped.wsaBuf ),
-		1, 
-		NULL, 
-		0, 
-		&( _sendOverlapped.overlapped ), 
-		NULL );
+		1,
+		NULL,
+		0,
+		&( _sendOverlapped.overlapped ),
+		NULL ) )
+	{
+		int error = WSAGetLastError();
+		if ( error != WSA_IO_PENDING )
+		{
+			WARNING_LOG( "WSAEND ERROR", error );
+		}
+	}
 }
 
 

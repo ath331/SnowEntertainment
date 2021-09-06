@@ -17,8 +17,8 @@ public:
 		_recvOffset = 0;
 
 		_sendOverlapped.Init( EIocpMode::IOCP_SEND );
-		_recvOverlapped.wsaBuf.len = BUF_SIZE;
-		_recvOverlapped.wsaBuf.buf = _sendBuf;
+		_sendOverlapped.wsaBuf.len = BUF_SIZE;
+		_sendOverlapped.wsaBuf.buf = _sendBuf;
 	}
 
 	~TcpSession() {}
@@ -33,7 +33,8 @@ private:
 	SOCKET _sock; //clientSock
 
 	OverlappedCustom _recvOverlapped;
-	char  _recvBuf[ BUF_SIZE ];
+	char  _recvBuf[ BUF_SIZE ] = { 0, };
+	char  _recvTempBuf[ BUF_SIZE ] = { 0, }; //부족한 데이터가 저장되는 임시 버퍼
 	DWORD _recvFlag;
 	DWORD _recvOffset;  //recv데이터를 받을 위치
 
