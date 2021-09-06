@@ -73,7 +73,7 @@ void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 		return;
 	}
 
-	//TCP 수신 특성 생각하기
+	//TCP 수신 특성 생각하기//
 
 	_PostRecv();
 	_PostSend( bytesTrans );
