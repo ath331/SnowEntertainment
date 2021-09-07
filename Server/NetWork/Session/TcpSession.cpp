@@ -1,6 +1,7 @@
 #include "TcpSession.h"
 #include "..//..//Core/LogCustom/Log.h"
 
+#include <cstring>
 #include <iostream>
 
 #pragma warning(disable:4996)
@@ -23,9 +24,9 @@ void TcpSession::_Close()
 	cout << "[ Close ] SOCKET is " << _sock << endl;
 }
 
-void TcpSession::_PostRecv()
+void TcpSession::_PostRecv( size_t size )
 {
-	strcat( _recvTempBuf, _recvOverlapped.wsaBuf.buf );
+	strncat( &_recvTempBuf[ _recvOffset - 1 ], _recvOverlapped.wsaBuf.buf, size );
 
 	if ( SOCKET_ERROR == WSARecv(
 		_sock,
@@ -81,21 +82,40 @@ void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 
 	_recvOffset += bytesTrans;
 
-	if ( _recvOffset < 3 ) //동작 테스트를 위해 임시 길이 3으로 설정
+	if ( _recvOffset < 4 ) //동작 테스트를 위해 임시 길이 3으로 설정
 	{
-		_PostRecv();
+		_PostRecv( bytesTrans );
 		return;
 	}
 
 	//TCP 수신 특성 생각하기//
 
-	_PostRecv();
 	_PostSend( bytesTrans );
+	_PostRecv( bytesTrans );
 
-	_recvOffset -= _recvOffset; //동작 테스트를 위해 임시 길이. 패킷길이만큼 수신했으면 패킷크기를 뺴준다.
+	_MoveMemoryRecvBuf( 3 );
+	_recvOffset -= 3; //동작 테스트를 위해 임시 길이. 패킷길이만큼 수신했으면 패킷크기를 뺴준다.
 }
 
 void TcpSession::ProcessSendForIOCP()
 {
 	COMMON_LOG( "message echo------" );
+}
+
+
+//_recvTempBuf를 size만큼 떙기는 함수
+void TcpSession::_MoveMemoryRecvBuf( size_t size )
+{
+	if ( !_recvTempBuf )
+	{
+		WARNING_LOG("_recvTempBuf is NULL ( erroNo is 0 )", 0);
+		return;
+	}
+
+	if ( _recvOffset + size > BUF_SIZE )
+	{
+		ERROR_LOG( "size is Over BUF_SIZE  ( erroNo is 0 )", 0 );
+	}
+
+	memmove( _recvTempBuf, (const void*)&_recvTempBuf[ size ], _recvOffset - size );
 }

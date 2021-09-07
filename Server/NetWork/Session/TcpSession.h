@@ -44,8 +44,10 @@ private:
 
 private:
 	void _Close();
-	void _PostRecv();
+	void _PostRecv( size_t size = 0 );
 	void _PostSend( DWORD bytesTrans );
+
+	void _MoveMemoryRecvBuf( size_t size );
 
 private:
 	friend AcceptManager;
