@@ -21,15 +21,15 @@ int main( int argc, char* argv[] )
 	int strLen;
 	SOCKADDR_IN servAdr;
 
-	std::string defaultIP   = "";
-	std::string defaultPORT = "";
+	std::string defaultIP   = "58.226.25.251";
+	std::string defaultPORT = "9999";
 
 	if ( argc != 3 ) 
 	{
-		cout << "Please Input IP   : ";
+		/*cout << "Please Input IP   : ";
 		cin >> defaultIP;
 		cout << "Please Input Port : ";
-		cin >> defaultPORT;
+		cin >> defaultPORT;*/
 
 		argv[ 1 ] = (char*)defaultIP.c_str();
 		argv[ 2 ] = (char*)defaultPORT.c_str();
