@@ -21,7 +21,7 @@ int main( int argc, char* argv[] )
 	int strLen;
 	SOCKADDR_IN servAdr;
 
-	std::string defaultIP   = "58.226.25.251";
+	std::string defaultIP   = "127.0.0.1";
 	std::string defaultPORT = "9999";
 
 	if ( argc != 3 ) 
