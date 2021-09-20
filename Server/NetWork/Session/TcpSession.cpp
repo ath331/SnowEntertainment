@@ -82,8 +82,7 @@ void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 
 	if ( _recvOffset < 4 ) //동작 테스트를 위해 패킷 최소길이( 패킷 헤더 길이 ) 4로 가정
 	{
-		_CatStr( _recvBufOffset, bytesTrans );
-		_recvBufOffset += bytesTrans;
+		_CatStr( bytesTrans );
 
 		_PostRecv( bytesTrans );
 
@@ -92,12 +91,12 @@ void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 
 	//TODO : 임시버퍼에서 패킷을 만들 데이터만 추출
 
-	_CatStr( _recvBufOffset, bytesTrans );
-	_PostRecv( bytesTrans );
+	_CatStr( bytesTrans );
 
 	_MoveMemoryRecvBuf( 5 ); //패킷 크기 5으로 가정
 	_recvOffset -= 5; //동작 테스트를 위해 임시 길이. 패킷길이만큼 수신했으면 패킷크기를 뺴준다.
-	_recvBufOffset -= 5;
+
+	_PostRecv( bytesTrans );
 }
 
 void TcpSession::ProcessSendForIOCP()
@@ -105,10 +104,10 @@ void TcpSession::ProcessSendForIOCP()
 	COMMON_LOG( "message echo------" );
 }
 
-//임시 버퍼의 offset 위치에 size만큼 데이터를 이어붙이는 함수
-void TcpSession::_CatStr( unsigned int offset, size_t size )
+//임시 버퍼에 size만큼 데이터를 이어붙이는 함수
+void TcpSession::_CatStr( size_t size )
 {
-	strncat( &_recvTempBuf[ offset ], _recvOverlapped.wsaBuf.buf, size );
+	strncat( _recvTempBuf, _recvOverlapped.wsaBuf.buf, size );
 }
 
 //_recvTempBuf를 size만큼 떙기는 함수
@@ -126,4 +125,6 @@ void TcpSession::_MoveMemoryRecvBuf( size_t size )
 	}
 
 	memmove( _recvTempBuf, (const void*)&_recvTempBuf[ size ], _recvOffset - size );
+	memset( &_recvTempBuf[5 - 1], 0, sizeof(_recvTempBuf) );
+
 }
