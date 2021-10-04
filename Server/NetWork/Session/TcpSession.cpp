@@ -80,10 +80,9 @@ void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 
 	_recvOffset += bytesTrans;
 
-	if ( _recvOffset < 4 ) //동작 테스트를 위해 패킷 최소길이( 패킷 헤더 길이 ) 4로 가정
+	if ( _recvOffset < 3 ) //동작 테스트를 위해 패킷 최소길이( 패킷 헤더 길이 ) 3로 가정
 	{
 		_CatStr( bytesTrans );
-
 		_PostRecv( bytesTrans );
 
 		return;
@@ -125,6 +124,6 @@ void TcpSession::_MoveMemoryRecvBuf( size_t size )
 	}
 
 	memmove( _recvTempBuf, (const void*)&_recvTempBuf[ size ], _recvOffset - size );
-	memset( &_recvTempBuf[5 - 1], 0, sizeof(_recvTempBuf) );
+	memset( &_recvTempBuf[ _recvOffset - size ], 0, sizeof(_recvTempBuf) );
 
 }
