@@ -1,8 +1,9 @@
 #include "TcpSession.h"
-#include "..//..//Core/LogCustom/Log.h"
-
 #include <cstring>
 #include <iostream>
+
+#include "..//..//Core/LogCustom/Log.h"
+#include "..//..//Packet/BasePacket.h"
 
 #pragma warning(disable:4996)
 
@@ -79,16 +80,19 @@ void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 	}
 
 	_recvOffset += bytesTrans;
+	_CatStr( bytesTrans );
 
-	if ( _recvOffset < 3 ) //동작 테스트를 위해 패킷 최소길이( 패킷 헤더 길이 ) 3로 가정
+	if ( _recvOffset < sizeof( PakcetHeader ) )
 	{
-		_CatStr( bytesTrans );
 		_PostRecv( bytesTrans );
 
 		return;
 	}
 
-	if ( _recvOffset < 5 )
+	PakcetHeader packetHeader;
+	memcpy( &packetHeader, _recvTempBuf, sizeof( PakcetHeader ) );
+
+	if ( _recvOffset < packetHeader.size )
 	{
 		_CatStr( bytesTrans );
 		_PostRecv( bytesTrans );
