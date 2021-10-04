@@ -88,6 +88,14 @@ void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 		return;
 	}
 
+	if ( _recvOffset < 5 )
+	{
+		_CatStr( bytesTrans );
+		_PostRecv( bytesTrans );
+
+		return;
+	}
+
 	//TODO : 임시버퍼에서 패킷을 만들 데이터만 추출
 
 	_CatStr( bytesTrans );
