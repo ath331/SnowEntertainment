@@ -6,6 +6,6 @@ struct BasePacket
 	PakcetHeader header;
 
 protected:
-	virtual void OnPackethandler() = 0;
+	virtual void OnPacketHandler() = 0;
 };
 

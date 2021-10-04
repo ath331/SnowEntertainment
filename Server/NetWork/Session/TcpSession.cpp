@@ -94,18 +94,15 @@ void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 
 	if ( _recvOffset < packetHeader.size )
 	{
-		_CatStr( bytesTrans );
 		_PostRecv( bytesTrans );
 
 		return;
 	}
 
-	//TODO : 임시버퍼에서 패킷을 만들 데이터만 추출
+	//TODO : 패킷 복사하고 OnHandler 함수 실행
 
-	_CatStr( bytesTrans );
-
-	_MoveMemoryRecvBuf( 5 ); //패킷 크기 5으로 가정
-	_recvOffset -= 5; //동작 테스트를 위해 임시 길이. 패킷길이만큼 수신했으면 패킷크기를 뺴준다.
+	_MoveMemoryRecvBuf( packetHeader.size );
+	_recvOffset -= packetHeader.size;
 
 	_PostRecv( bytesTrans );
 }
