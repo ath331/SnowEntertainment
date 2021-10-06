@@ -146,10 +146,13 @@
     <ClInclude Include="BasePacket.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="PacketConnect.h" />
+    <ClInclude Include="PacketConnectResult.h" />
+    <ClInclude Include="PktConsts.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BasePacket.cpp" />
     <ClCompile Include="PacketConnect.cpp" />
+    <ClCompile Include="PacketConnectResult.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

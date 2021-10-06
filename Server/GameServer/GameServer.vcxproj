@@ -159,6 +159,9 @@
     <ProjectReference Include="..\NetWork\NetWork.vcxproj">
       <Project>{146e4c5f-071c-4fb2-927d-89bcc9790109}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Packet\Packet.vcxproj">
+      <Project>{c9b55303-77e3-42b0-af41-5f5ed3c08d05}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\ClientManager.h" />

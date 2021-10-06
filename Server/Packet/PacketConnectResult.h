@@ -1,8 +1,7 @@
 #pragma once
 #include "BasePacket.h"
 
-class PacketConnect :
+class PacketConnectResult :
 	public BasePacket
 {
-	virtual void OnPacketHandler();
 };
