@@ -41,11 +41,11 @@
     <ClInclude Include="Parser\CConfigParser.h">
       <Filter>Parser</Filter>
     </ClInclude>
-    <ClInclude Include="SingleTon\UxSingleTon.h">
-      <Filter>SingleTon</Filter>
-    </ClInclude>
     <ClInclude Include="LogCustom\Log.h">
       <Filter>Log</Filter>
+    </ClInclude>
+    <ClInclude Include="SingleTon\SingleTonClass.h">
+      <Filter>SingleTon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

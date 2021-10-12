@@ -1,11 +1,11 @@
 #pragma once
 
 #include "..//Parser/CConfigParser.h"
-#include "..//SingleTon/UxSingleTon.h"
+#include "..//SingleTon/SingleTonClass.h"
 
 class EnvironmentManager : 
 	public CConfigParser,
-	public UxSingleTon< EnvironmentManager >
+	public SingleTonClass< EnvironmentManager >
 {
 public:
 	EnvironmentManager();

@@ -150,7 +150,7 @@
     <ClInclude Include="Environment\EnvironmentManager.h" />
     <ClInclude Include="LogCustom\Log.h" />
     <ClInclude Include="Parser\CConfigParser.h" />
-    <ClInclude Include="SingleTon\UxSingleTon.h" />
+    <ClInclude Include="SingleTon\SingleTonClass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
