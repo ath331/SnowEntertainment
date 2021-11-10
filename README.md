@@ -2,10 +2,10 @@
 
 SnowEntertainment 
 
-ÆÐÅ¶ ¼³°è?
+íŒ¨í‚· ì„¤ê³„?
 
-TcpSession ( À¯Àú¸¶´Ù µé°í ÀÖÀ½ ) ¿¡¼­ ÀûÀýÇÑ »çÀÌÁîÀÇ µ¥ÀÌÅÍ¸¦ ¹ÞÀ¸¸é?
+TcpSession ( ìœ ì €ë§ˆë‹¤ ë“¤ê³  ìžˆìŒ ) ì—ì„œ ì ì ˆí•œ ì‚¬ì´ì¦ˆì˜ ë°ì´í„°ë¥¼ ë°›ìœ¼ë©´?
 
-PacketProjectÀÇ ÆÐÅ¶°ü¸® Å¬·¡½º ( ÀÌ¸§Àº ¾Æ¸¶ ÆÐÅ¶ µð½ºÆÐÃÄ? )·Î µ¥ÀÌÅÍ¸¦ ³Ñ±â°í
+PacketProjectì˜ íŒ¨í‚·ê´€ë¦¬ í´ëž˜ìŠ¤ ( ì´ë¦„ì€ ì•„ë§ˆ íŒ¨í‚· ë””ìŠ¤íŒ¨ì³? )ë¡œ ë°ì´í„°ë¥¼ ë„˜ê¸°ê³ 
 
-ÆÐÅ¶ µð½ºÆÐÃÄ¿¡¼­ GameProjectÀÇ ÀÖ´Â ÀûÀýÇÑ ÇÚµé·¯¸¦ Ã£¾Æ¼­ ÇØ´ç ÇÚµé·¯·Î ·ÎÁ÷À» ÅÂ¿ì±â.
+íŒ¨í‚· ë””ìŠ¤íŒ¨ì³ì—ì„œ GameProjectì˜ ìžˆëŠ” ì ì ˆí•œ í•¸ë“¤ëŸ¬ë¥¼ ì°¾ì•„ì„œ í•´ë‹¹ í•¸ë“¤ëŸ¬ë¡œ ë¡œì§ì„ íƒœìš°ê¸°.
