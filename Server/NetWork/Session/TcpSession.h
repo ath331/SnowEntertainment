@@ -1,5 +1,6 @@
 #pragma once
 
+#include "..//..//Packet/PacketDispatcher/PacketDispatcher.h"
 #include "../../GameServer/OverlappedCustom.h"
 #include <winsock2.h>
 
@@ -19,6 +20,8 @@ public:
 		_sendOverlapped.Init( EIocpMode::IOCP_SEND );
 		_sendOverlapped.wsaBuf.len = BUF_SIZE;
 		_sendOverlapped.wsaBuf.buf = _sendBuf;
+
+
 	}
 
 	~TcpSession() {}
@@ -33,7 +36,7 @@ private:
 	SOCKET _sock; //clientSock
 
 	OverlappedCustom _recvOverlapped;
-	char  _recvBuf[ BUF_SIZE ] = { 0, };     //WSABUF의 데이터를 받는 버퍼
+	char  _recvBuf[ BUF_SIZE ]     = { 0, };     //WSABUF의 데이터를 받는 버퍼
 	char  _recvTempBuf[ BUF_SIZE ] = { 0, }; //부족한 데이터가 저장되는 임시 버퍼
 	DWORD _recvFlag;
 	DWORD _recvOffset;  //쌓여있는 데이터 크기
@@ -41,6 +44,8 @@ private:
 	OverlappedCustom _sendOverlapped;
 	char _sendBuf[ BUF_SIZE ];
 
+private:
+	PacketDispatcher _packetDispatcher;
 
 private:
 	void _Close();

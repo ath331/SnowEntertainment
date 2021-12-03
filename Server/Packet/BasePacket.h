@@ -22,5 +22,10 @@ protected:
 
 	void SetResultCode( EResultCode resultCode = EResultCode::Max ) { _resultCode = resultCode; }
 	EResultCode GetResultCode() { return _resultCode; }
+
+public:
+	void _SetPacketName( std::string name ) { header.packetName = name; }
+	std::string _GetPacketName() { return header.packetName; }
 };
+
 

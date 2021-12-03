@@ -16,6 +16,15 @@
     <Filter Include="PacketCreate">
       <UniqueIdentifier>{b3e42783-690f-4c5e-b105-2c90dfa52612}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PacketDispatch">
+      <UniqueIdentifier>{a31ffbea-c71b-4255-8feb-0f3624f38531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Packet">
+      <UniqueIdentifier>{e42ca8ca-ec73-487f-8417-8853fb8343ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pkt">
+      <UniqueIdentifier>{7c1b16e2-24a9-45e7-b891-228f3900661f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h">
@@ -24,25 +33,34 @@
     <ClInclude Include="BasePacket.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PacketConnect.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PacketConnectResult.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="PktConsts.h">
       <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketDispatcher\PacketDispatcher.h">
+      <Filter>PacketDispatch</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketConnect.h">
+      <Filter>Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketConnectResult.h">
+      <Filter>Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="Pkt\PktNameTransPacket.h">
+      <Filter>Pkt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BasePacket.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="PacketDispatcher\PacketDispatcher.cpp">
+      <Filter>PacketDispatch</Filter>
+    </ClCompile>
     <ClCompile Include="PacketConnect.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Packet</Filter>
     </ClCompile>
     <ClCompile Include="PacketConnectResult.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Packet</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

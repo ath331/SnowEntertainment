@@ -147,12 +147,15 @@
     <ClInclude Include="Header.h" />
     <ClInclude Include="PacketConnect.h" />
     <ClInclude Include="PacketConnectResult.h" />
+    <ClInclude Include="PacketDispatcher\PacketDispatcher.h" />
     <ClInclude Include="PktConsts.h" />
+    <ClInclude Include="Pkt\PktNameTransPacket.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BasePacket.cpp" />
     <ClCompile Include="PacketConnect.cpp" />
     <ClCompile Include="PacketConnectResult.cpp" />
+    <ClCompile Include="PacketDispatcher\PacketDispatcher.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -155,6 +155,14 @@
     <ClInclude Include="NetWork.h" />
     <ClInclude Include="Session\TcpSession.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.vcxproj">
+      <Project>{935276f3-91ce-4fd4-b595-a4d752833bd4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Packet\Packet.vcxproj">
+      <Project>{c9b55303-77e3-42b0-af41-5f5ed3c08d05}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
