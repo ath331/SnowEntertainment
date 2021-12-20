@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..//..//Packet/PacketDispatcher/PacketDispatcher.h"
+#include "..//..//GameServer/User/User.h"
 #include "../../GameServer/OverlappedCustom.h"
 #include <winsock2.h>
 
@@ -21,7 +21,7 @@ public:
 		_sendOverlapped.wsaBuf.len = BUF_SIZE;
 		_sendOverlapped.wsaBuf.buf = _sendBuf;
 
-
+		_user = std::make_shared< User* >( this );
 	}
 
 	~TcpSession() {}
@@ -36,16 +36,16 @@ private:
 	SOCKET _sock; //clientSock
 
 	OverlappedCustom _recvOverlapped;
-	char  _recvBuf[ BUF_SIZE ]     = { 0, };     //WSABUF의 데이터를 받는 버퍼
-	char  _recvTempBuf[ BUF_SIZE ] = { 0, }; //부족한 데이터가 저장되는 임시 버퍼
+	char  _recvBuf[ BUF_SIZE ]     = { 0, };   //WSABUF의 데이터를 받는 버퍼
+	char  _recvTempBuf[ BUF_SIZE ] = { 0, };   //부족한 데이터가 저장되는 임시 버퍼
 	DWORD _recvFlag;
-	DWORD _recvOffset;  //쌓여있는 데이터 크기
+	DWORD _recvOffset;  //모여있는 데이터 크기
 
 	OverlappedCustom _sendOverlapped;
 	char _sendBuf[ BUF_SIZE ];
 
 private:
-	PacketDispatcher _packetDispatcher;
+	UserPtr _user;     // 해당 세션을 사용하는 유저
 
 private:
 	void _Close();

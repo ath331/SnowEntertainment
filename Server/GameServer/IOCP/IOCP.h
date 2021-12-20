@@ -23,6 +23,7 @@ private:
 	std::string       _serverIP;
 	std::string       _serverPORT;
 	int               _iocpThreadCount;
+	int               _logicThreadCount;
 
 	HANDLE            _completionPort;
 
@@ -30,7 +31,7 @@ private:
 
 	BindManager*      _bindManager;
 	ListenManager*    _listenManager;
-	ThreadManager*    _ioThreadManager;
+	ThreadManager*    _threadManager;
 	AcceptManager*    _acceptManager;
 
 private:

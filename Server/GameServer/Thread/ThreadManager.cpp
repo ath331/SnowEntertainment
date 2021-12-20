@@ -1,6 +1,6 @@
 #include "ThreadManager.h"
 
-void ThreadManager::Add( HANDLE threadHandle )
+void ThreadManager::pushIoThread( HANDLE threadHandle )
 {
-	_threadVec.push_back( threadHandle );
+	_ioThreadVec.push_back( threadHandle );
 }

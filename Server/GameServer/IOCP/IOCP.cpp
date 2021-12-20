@@ -21,27 +21,27 @@ using namespace std;
 IOCP::IOCP() :
 	CConfigParser("../Ini/GameServer.ini")
 {
-	_serverIP        = GetString( "SERVER_IP"         );
-	_serverPORT      = GetString( "SERVER_PORT"       );
-	_iocpThreadCount = GetInt   ( "IOCP_THREAD_COUNT" );
+	_serverIP         = GetString( "SERVER_IP"          );
+	_serverPORT       = GetString( "SERVER_PORT"        );
+	_iocpThreadCount  = GetInt   ( "IOCP_THREAD_COUNT"  );
+	_logicThreadCount = GetInt   ( "LOGIC_THREAD_COUNT" );
 
 	cout << "[ IOCP Setting ]\n";
-	cout << "IP   : "          << _serverIP        << endl;
-	cout << "PORT : "          << _serverPORT      << endl;
-	cout << "IoThreadCount : " << _iocpThreadCount << endl;
+	cout << "IP   : "          << _serverIP   << endl;
+	cout << "PORT : "          << _serverPORT << endl;
+	cout << "IoThreadCount    : " << _iocpThreadCount  << endl;
+	cout << "LogicThreadCount : " << _logicThreadCount << endl;
 
 	_CreateCompletionPort();
 
-	_ioThreadManager = new ThreadManager;
-	if ( !_ioThreadManager )
-	{
+	_threadManager = new ThreadManager;
+	if ( !_threadManager )
 		ERROR_LOG( "new _ioThreadManager error", WSAGetLastError() );
-	}
 
 	for ( unsigned short i = 0; i < _iocpThreadCount; i++ )
-	{
-		_ioThreadManager->Add( (HANDLE)_beginthreadex( NULL, 0, ProcessIocp, this, 0, NULL ) );
-	}
+		_threadManager->pushIoThread( (HANDLE)_beginthreadex( NULL, 0, ProcessIocp, this, 0, NULL ) );
+
+	//로직 스레드 생성?
 
 	_servSock = WSASocket( AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED );
 	CreateIoCompletionPort( (HANDLE)_servSock, _completionPort, NULL, 0 );
@@ -57,8 +57,8 @@ IOCP::~IOCP()
 	if ( _listenManager )
 		delete _listenManager;
 
-	if ( _ioThreadManager )
-		delete _ioThreadManager;
+	if ( _threadManager )
+		delete _threadManager;
 
 	if ( _acceptManager )
 		delete _acceptManager;
@@ -73,23 +73,17 @@ void IOCP::_ReadyConnect()
 {
 	_bindManager = new BindManager( _serverPORT );
 	if ( !_bindManager )
-	{
 		ERROR_LOG( "new Bind error", WSAGetLastError() );
-	}
 	_bindManager->Bind( _servSock );
 
 	_listenManager = new ListenManager;
 	if ( !_listenManager )
-	{
 		ERROR_LOG( "new Listen error", WSAGetLastError() );
-	}
 	_listenManager->Listen( _servSock );
 
 	_acceptManager = new AcceptManager( _servSock, _completionPort );
 	if ( !_acceptManager )
-	{
 		ERROR_LOG( "new Accept error", WSAGetLastError() );
-	}
 }
 
 void IOCP::Run()
@@ -101,8 +95,8 @@ void IOCP::Run()
 
 void IOCP::Wait()
 {
-	int threadCount = _ioThreadManager->GetThreadCount();
-	vector< HANDLE >* threadVecPtr = _ioThreadManager->GetThreadVecPtr();
+	int threadCount = _threadManager->GetThreadCount();
+	vector< HANDLE >* threadVecPtr = _threadManager->GetThreadVecPtr();
 
 	WaitForMultipleObjects( threadCount, threadVecPtr->data(), true, INFINITE );
 }

@@ -5,13 +5,14 @@
 class ThreadManager
 {
 public:
-	void Add( HANDLE threadHandle );
-	int GetThreadCount() { return (int)_threadVec.size(); };
+	void pushIoThread( HANDLE threadHandle );
+	int GetThreadCount() { return (int)_ioThreadVec.size(); };
 
-	std::vector< HANDLE >* GetThreadVecPtr() { return &_threadVec; };
+	std::vector< HANDLE >* GetThreadVecPtr() { return &_ioThreadVec; };
 
 private:
-	std::vector< HANDLE > _threadVec;
+	std::vector< HANDLE > _ioThreadVec;
+	std::vector< HANDLE > _logicThreadVec;
 
 };
 

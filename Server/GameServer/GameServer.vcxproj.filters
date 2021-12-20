@@ -22,6 +22,9 @@
     <Filter Include="Client">
       <UniqueIdentifier>{b3641917-7a41-4fbb-9cfd-d614cbb29a03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="User">
+      <UniqueIdentifier>{a2b40def-296c-4fe5-9883-2dbd6319b0b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -35,6 +38,9 @@
     </ClCompile>
     <ClCompile Include="Client\ClientManager.cpp">
       <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="User\User.cpp">
+      <Filter>User</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="Client\ClientManager.h">
       <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="User\User.h">
+      <Filter>User</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
