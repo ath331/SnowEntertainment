@@ -14,3 +14,7 @@ string to char[], char[] to string : https://danco.tistory.com/69
 ( sk브로드밴드는 브릿지 설정시 관리자 모드 못감. 초기화 해야댐 주위 )
 
 깃허브 에서 한글 꺠지는 현상 수정 : https://nocount.tistory.com/213
+
+vs 시스템 매크로 :
+https://hwanschoi.tistory.com/90
+
