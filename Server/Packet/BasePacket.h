@@ -1,9 +1,9 @@
 #pragma once
 
 #pragma warning(disable:4624) //가상 소멸자 암시적 삭제 경고 제거용
+#include <memory>
 
 #include "PktConsts.h"
-
 #include "Header.h"
 
 class BasePacket
@@ -12,7 +12,7 @@ public:
 	BasePacket();
 	~BasePacket();
 
-	PakcetHeader header;
+	PacketHeader header;
 
 protected:
 	EResultCode _resultCode;
@@ -29,3 +29,4 @@ public:
 };
 
 
+typedef std::shared_ptr< BasePacket > BasePacketPtr

@@ -82,15 +82,15 @@ void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 	_recvOffset += bytesTrans;
 	_CatStr( bytesTrans );
 
-	if ( _recvOffset < sizeof( PakcetHeader ) )
+	if ( _recvOffset < sizeof( PacketHeader ) )
 	{
 		_PostRecv( bytesTrans );
 
 		return;
 	}
 
-	PakcetHeader packetHeader;
-	memcpy( &packetHeader, _recvTempBuf, sizeof( PakcetHeader ) );
+	PacketHeader packetHeader;
+	memcpy( &packetHeader, _recvTempBuf, sizeof( PacketHeader ) );
 
 	if ( _recvOffset < packetHeader.size )
 	{
@@ -99,7 +99,7 @@ void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 		return;
 	}
 
-	//TODO : 패킷 복사하고 OnHandler 함수 실행
+	_user->MakePacketFromRecvBuf( _recvTempBuf, packetHeader );
 
 	_MoveMemoryRecvBuf( packetHeader.size );
 	_recvOffset -= packetHeader.size;

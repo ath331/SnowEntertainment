@@ -5,6 +5,7 @@
 class TcpSession;
 
 class User
+	: public PacketDispatcher
 {
 public:
 	User();
@@ -15,9 +16,6 @@ public:
 private:
 	TcpSession* _session;
 
-public:
-	PacketDispatcher packetDispatcher;
-
 };
 
-typedef std::shared_ptr< User* > UserPtr;
+typedef std::shared_ptr< User > UserPtr;

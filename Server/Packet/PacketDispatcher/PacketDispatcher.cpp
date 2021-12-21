@@ -2,10 +2,19 @@
 #include "..//BasePacket.h"
 #include "..//Pkt/PktNameTransPacket.h"
 
-// 패킷 처리 스레드로 패킷을 전달
-void PacketDispatcher::OnPacketDelivery( BasePacket* packet )
+void PacketDispatcher::MakePacketFromRecvBuf( char* recvBuf, PacketHeader pktHeader )
 {
-	BasePacket* pkt = PktNameTransPacket( packet->_GetPacketName() );
+	if ( !recvBuf )
+		return;
+
+	int pktSize = pktHeader.size;
+	if ( !pktSize )
+		return;
+
+	BasePacketPtr packet = PktNameTransPacket( pktHeader.packetName );
+	memcpy( (void *)&packet, recvBuf, pktSize );
+	if ( !packet )
+		return;
 
 
 }

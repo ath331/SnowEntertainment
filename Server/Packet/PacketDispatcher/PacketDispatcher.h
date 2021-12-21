@@ -1,13 +1,13 @@
 #pragma once
+#include "..//BasePacket.h"
 
-class BasePacket;
 class PacketDispatcher
 {
 private:
 
 public:
+	void MakePacketFromRecvBuf( char* recvBuf, PacketHeader pktHeader );
 
 private:
-	static void OnPacketDelivery( BasePacket* packet );
 
 };

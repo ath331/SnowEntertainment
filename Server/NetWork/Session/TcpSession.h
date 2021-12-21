@@ -21,7 +21,7 @@ public:
 		_sendOverlapped.wsaBuf.len = BUF_SIZE;
 		_sendOverlapped.wsaBuf.buf = _sendBuf;
 
-		_user = std::make_shared< User* >( this );
+		_user = std::make_shared< User >( this );
 	}
 
 	~TcpSession() {}
