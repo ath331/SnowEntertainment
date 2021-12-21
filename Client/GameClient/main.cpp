@@ -1,4 +1,5 @@
 #pragma warning(disable:4996)
+#pragma comment(lib, "ws2_32")
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,7 +22,7 @@ int main( int argc, char* argv[] )
 	int strLen;
 	SOCKADDR_IN servAdr;
 
-	std::string defaultIP   = "127.0.0.1";
+	std::string defaultIP   = "118.221.51.93";
 	std::string defaultPORT = "9999";
 
 	if ( argc != 3 ) 
@@ -52,7 +53,23 @@ int main( int argc, char* argv[] )
 	else
 		puts( "Connected..........." );
 
-	while ( 1 )
+	class PacketConnect
+	{
+	public :
+		int size = 0;      //ÆÐÅ¶ Size
+
+		std::string packetName = "";
+	};
+
+	PacketConnect packetConnect;
+	packetConnect.size = sizeof( PacketConnect );
+	packetConnect.packetName = "PacketConnect";
+
+	char szPacket[ 100 ];
+	memset( szPacket, 0, sizeof( PacketConnect ) );
+	memcpy( szPacket, &packetConnect, sizeof( packetConnect ) );
+
+	/*while ( 1 )
 	{
 		message.clear();
 		fputs( "Input message( end to quit ): ", stdout );
@@ -63,10 +80,10 @@ int main( int argc, char* argv[] )
 
 		int sendLen = message.size();
 		send( hSocket, message.c_str(), sendLen, 0 );
-		/*strLen = recv( hSocket, recvBuf, BUF_SIZE - 1, 0 );
-		message[ strLen ] = 0;
-		printf( "Message from server: %s \n", recvBuf );*/
-	}
+	}*/
+
+	int sendLen = sizeof( PacketConnect );
+	int sendedLen = send( hSocket, szPacket, sizeof( PacketConnect ), 0 );
 
 	closesocket( hSocket );
 	WSACleanup();
