@@ -92,7 +92,7 @@ void TcpSession::ProcessRecvForIOCP( DWORD bytesTrans )
 	PacketHeader packetHeader;
 	memcpy( &packetHeader, _recvTempBuf, sizeof( PacketHeader ) );
 
-	if ( _recvOffset < packetHeader.size )
+	if ( (int)_recvOffset < packetHeader.size )
 	{
 		_PostRecv( bytesTrans );
 

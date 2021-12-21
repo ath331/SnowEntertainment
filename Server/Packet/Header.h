@@ -5,8 +5,7 @@
 
 struct PacketHeader
 {
-	int size         = 0;      //패킷 Size
-	char packetData[ BUF_SIZE ] = { 0, }; //패킷 Data
+	int size = 0;      //패킷 Size
 
 	std::string packetName = "";
 };

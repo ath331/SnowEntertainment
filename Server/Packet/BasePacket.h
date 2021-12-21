@@ -29,4 +29,4 @@ public:
 };
 
 
-typedef std::shared_ptr< BasePacket > BasePacketPtr
+typedef std::shared_ptr< BasePacket > BasePacketPtr;

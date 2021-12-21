@@ -7,4 +7,7 @@
 BasePacketPtr PktNameTransPacket( std::string pktName )
 {
 	if ( pktName == "PacketConnect" ) return std::make_shared< PacketConnect >();
+
+	else 
+		return nullptr;
 }
