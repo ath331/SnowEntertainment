@@ -40,7 +40,7 @@ void DoWorkerJob( ServerServiceRef& service )
 
 int main()
 {
-	ASSERT_CRASH( GDBConnectionPool->Connect( 1, L"Driver={SQL Server Native Client 11.0};Server=(localdb)\\ProjectsV13;Database=ServerDb;Trusted_Connection=Yes;" ) );
+	ASSERT_CRASH( GDBConnectionPool->Connect( 1, L"Driver={SQL Server Native Client 11.0};Server=(localdb)\\MSSQLLocalDB;Database=ServerDb;Trusted_Connection=Yes;" ) );
 
 	DBConnection* dbConn = GDBConnectionPool->Pop();
 	DBSynchronizer dbSync( *dbConn );
@@ -72,7 +72,7 @@ int main()
 		getGold.Execute();
 		while ( getGold.Fetch() )
 		{
-			GConsoleLogger->WriteStdOut( Color::BLUE,
+			GConsoleLogger->WriteStdOut( Color::GREEN,
 				L"ID[%d] Gold[%d] Name[%s]\n", id, gold, name );
 		}
 	}
