@@ -7,6 +7,7 @@
 void GameSession::OnConnected()
 {
 	GSessionManager.Add( static_pointer_cast<GameSession>( shared_from_this() ) );
+	cout << "Client Connect !!" << endl;
 }
 
 void GameSession::OnDisconnected()
@@ -21,6 +22,8 @@ void GameSession::OnDisconnected()
 
 	_currentPlayer = nullptr;
 	_players.clear();
+
+	cout << "Client DisConnect !!" << endl;
 }
 
 void GameSession::OnRecvPacket( BYTE* buffer, int32 len )
