@@ -18,3 +18,7 @@ string to char[], char[] to string : https://danco.tistory.com/69
 vs 시스템 매크로 :
 https://hwanschoi.tistory.com/90
 
+Unity ProtoBuf 예시 : https://geekcoders.tistory.com/entry/Unity-Unity%EC%97%90%EC%84%9C%EC%9D%98-Proto-Buffer-%EC%82%AC%EC%9A%A9
+
+
+
